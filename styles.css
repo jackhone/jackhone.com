@@ -23,6 +23,7 @@ body {
 main {
     max-width: 760px;
     margin: 0 auto;
+    margin-top: 25vh;
 }
 
 header {
@@ -126,5 +127,9 @@ footer {
 
     header p {
         font-size: 1.25rem;
+    }
+
+    main {
+        margin-top: 15vh;
     }
 } 
