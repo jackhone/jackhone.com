@@ -4,14 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack Hone - Senior Product Designer</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .project:nth-child(1) { transition-delay: 0.2s; }
+        .project:nth-child(2) { transition-delay: 0.4s; }
+        .project:nth-child(3) { transition-delay: 0.6s; }
+        .project:nth-child(4) { transition-delay: 0.8s; }
+    </style>
 </head>
 <body>
     <main>
-        <header>
+        <header class="fade-in">
             <div class="header-left">
                 <h1>Jack Hone</h1>
                 <h2>Senior Product Designer</h2>
@@ -22,9 +42,10 @@
         </header>
 
         <section class="portfolio">
-            <article class="project">
+            <article class="project fade-in">
                 <div class="project-image">
-                    <!-- Add app screenshot image here -->
+                    <img src="images/bulb.png" 
+                         alt="Bulb car charging app interface showing charging schedule and settings">
                 </div>
                 <div class="project-info">
                     <h3>Bulb</h3>
@@ -33,9 +54,9 @@
                 </div>
             </article>
 
-            <article class="project">
+            <article class="project fade-in">
                 <div class="project-image">
-                    <!-- Add website screenshot image here -->
+                    <img src="images/airbnb-type.png" alt="Airbnb Cereal typeface showcase website">
                 </div>
                 <div class="project-info">
                     <h3>Airbnb</h3>
@@ -44,9 +65,9 @@
                 </div>
             </article>
 
-            <article class="project">
+            <article class="project fade-in">
                 <div class="project-image">
-                    <!-- Add dashboard screenshot image here -->
+                    <img src="images/airbnb.png" alt="Airbnb travel admin dashboard interface">
                 </div>
                 <div class="project-info">
                     <h3>Airbnb</h3>
@@ -55,9 +76,9 @@
                 </div>
             </article>
 
-            <article class="project">
+            <article class="project fade-in">
                 <div class="project-image">
-                    <!-- Add Land Rover app screenshots here -->
+                    <img src="images/jlr.png" alt="Jaguar Land Rover Control app interface">
                 </div>
                 <div class="project-info">
                     <h3>Jaguar Land Rover</h3>
@@ -67,9 +88,10 @@
             </article>
         </section>
 
-        <footer>
+        <footer class="fade-in">
             <p>Follow me on <a href="https://twitter.com/jackhone" class="external-link">Twitter @jackhone ↗</a></p>
         </footer>
     </main>
+    <script src="animations.js"></script>
 </body>
 </html> 
