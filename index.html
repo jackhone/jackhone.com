@@ -1,97 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jack Hone - Product Designer</title>
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .project:nth-child(1) { transition-delay: 0.2s; }
-        .project:nth-child(2) { transition-delay: 0.4s; }
-        .project:nth-child(3) { transition-delay: 0.6s; }
-        .project:nth-child(4) { transition-delay: 0.8s; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jack Hone - Homepage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main>
-        <header class="fade-in">
-            <div class="header-left">
-                <h1>Jack Hone</h1>
-                <h2>Product Designer</h2>
-            </div>
-            <div class="header-right">
-                <p>Based in London, designing experience commerce at <a href="#" class="external-link">Easol</a>. Previously at Bulb, Airbnb and ustwo.</p>
-            </div>
-        </header>
-
-        <section class="portfolio">
-            <article class="project fade-in">
-                <div class="project-image">
-                    <img src="images/bulb.png" 
-                         alt="Bulb car charging app interface showing charging schedule and settings">
-                </div>
-                <div class="project-info">
-                    <h3>Bulb</h3>
-                    <h4>Car charging</h4>
-                    <p>Make charging an electric car when energy is cheapest as simple and rewarding as child's play.</p>
-                </div>
-            </article>
-
-            <article class="project fade-in">
-                <div class="project-image">
-                    <img src="images/airbnb-type.png" alt="Airbnb Cereal typeface showcase website">
-                </div>
-                <div class="project-info">
-                    <h3>Airbnb</h3>
-                    <h4>Typeface launch site</h4>
-                    <p>Celebrate the launch of Airbnb's custom designed typeface, showcasing its craft.</a></p>
-                </div>
-            </article>
-
-            <article class="project fade-in">
-                <div class="project-image">
-                    <img src="images/airbnb.png" alt="Airbnb travel admin dashboard interface">
-                </div>
-                <div class="project-info">
-                    <h3>Airbnb</h3>
-                    <h4>Travel admin dashboard</h4>
-                    <p>Empower travel admins with the information they need to advocate for Airbnb.</p>
-                </div>
-            </article>
-
-            <article class="project fade-in">
-                <div class="project-image">
-                    <img src="images/jlr.png" alt="Jaguar Land Rover Control app interface">
-                </div>
-                <div class="project-info">
-                    <h3>Jaguar Land Rover</h3>
-                    <h4>Control iOS and Android apps</h4>
-                    <p>Turn a flashy concept into a real product across two brand and two app stores.</p>
-                </div>
-            </article>
-        </section>
-
-        <footer class="fade-in">
-            <p>Follow me on <a href="https://twitter.com/jackhone" class="external-link">Twitter @jackhone ↗</a></p>
-        </footer>
-    </main>
-    <script src="animations.js"></script>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-logo" aria-label="Logo">
+        <img src="assets/logo.svg" alt="Jack Hone logo" width="48" height="48">
+      </div>
+      <h1 class="hero-title">Jack Hone</h1>
+      <p class="hero-tagline">Product-minded designer with over a decade of experience.</p>
+      <div class="hero-work">
+        <div class="work-item">
+          <div class="work-period">2014 - 2017</div>
+          <div class="work-place">ustwo</div>
+          <div class="work-desc">Consumer banking and entertainment.</div>
+        </div>
+        <div class="work-item">
+          <div class="work-period">2017 - 2020</div>
+          <div class="work-place">Airbnb</div>
+          <div class="work-desc">Design systems and internal tooling.</div>
+        </div>
+        <div class="work-item">
+          <div class="work-period">2020 - 2022</div>
+          <div class="work-place">Bulb Energy</div>
+          <div class="work-desc">Data visualisation and design systems.</div>
+        </div>
+        <div class="work-item">
+          <div class="work-period">2022 - Now</div>
+          <div class="work-place">Easol</div>
+          <div class="work-desc">Vertical SaaS with a consumer side.</div>
+        </div>
+      </div>
+      <div class="hero-now">
+        <div class="now-label">Now</div>
+        <div class="now-desc">Short statement about projects, reading, watching, listening, dancing, travel...</div>
+        <div class="now-updated">Updated 13 days ago</div>
+      </div>
+    </section>
+  </main>
 </body>
-</html> 
