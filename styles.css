@@ -57,7 +57,7 @@ body {
 }
 
 .container {
-  margin: 40vh auto var(--space-md) auto;
+  margin: 36vh auto var(--space-md) auto;
   max-width: 1200px;
 }
 

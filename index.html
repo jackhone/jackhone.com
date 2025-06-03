@@ -15,7 +15,7 @@
     <main class="container">
       <section class="hero">
         <div class="hero-logo" aria-label="Logo">
-          <img src="assets/logo.svg" alt="Jack Hone logo" width="48" height="48">
+          <img src="assets/logo-dark.svg" alt="Jack Hone logo" width="60" height="60">
         </div>
         <h1 class="hero-title">Jack Hone</h1>
         <p class="hero-tagline">Craft focused designer with over a decade of experience building from zero to one.</p>
@@ -44,7 +44,7 @@
         <div class="hero-now">
           <div class="now-label">Now</div>
           <div class="now-desc">Absolutely addicted to <a href="https://open.spotify.com/playlist/0BG0rGP5eP9MXZDMvlFrrV?si=96a86446fbac487b"target="_blank" rel="noopener" class="contact-link">this playlist</a> atm. Watching my way through The Last of Us. Trying to catch up with everything released at Config. Loving <a href="https://www.youtube.com/watch?v=-kTD5HgJDjg"target="_blank" rel="noopener" class="contact-link">this guys</a> videos for their very English content.</div>
-          <div class="now-updated">Updated 1 day ago</div>
+          <div class="now-updated" id="now-updated">Updated 1 day ago</div>
         </div>
       </section>
       <section id="work">
@@ -176,7 +176,7 @@
       <div class="footer-content">
         <p class="footer-text">Built in North London with Cursor.</p>
         <div class="footer-logo">
-          <img src="assets/logo.svg" alt="Jack Hone logo" width="48" height="48" class="footer-logo-img" id="footer-logo">
+          <img src="assets/logo-light.svg" alt="Jack Hone logo" width="60" height="60" class="footer-logo-img" id="footer-logo">
         </div>
       </div>
     </div>
@@ -184,12 +184,36 @@
 
   </footer>
   <script>
-    document.getElementById('footer-logo').addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('footer-logo').addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       });
+
+      // Function to calculate and display time difference
+      function updateTimeDifference() {
+        const targetDate = new Date('2025-05-14');
+        const currentDate = new Date();
+        const diffTime = Math.abs(targetDate - currentDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        const nowUpdated = document.getElementById('now-updated');
+        if (diffDays === 0) {
+          nowUpdated.textContent = 'Updated today';
+        } else if (diffDays === 1) {
+          nowUpdated.textContent = 'Updated 1 day ago';
+        } else {
+          nowUpdated.textContent = `Updated ${diffDays} days ago`;
+        }
+      }
+
+      // Call the function when the page loads
+      updateTimeDifference();
     });
   </script>
+
+  
 </body>
 </html>
