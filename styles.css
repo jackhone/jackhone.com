@@ -16,15 +16,14 @@
   --space-lg: clamp(4rem, 6vw, 6rem);    /* 64px - 96px */
   --space-xl: clamp(6rem, 8vw, 8rem);    /* 96px - 128px */
 
-  --color-bg: #F0F7FF;
+  --color-bg: #EAE8FF;
   --color-card: #F8FBFF;
   --color-tag: #E6F0FF;
-  --color-text: #2C3E50;
+  --color-text: #301EFF;
   --color-border: #D1E3FF;
-  --color-footer: #1A2B3C;
+  --color-footer: #301EFF;
 }
 
-/* CSS Reset */
 * {
   margin: 0;
   padding: 0;
@@ -42,15 +41,11 @@ body {
   color: var(--color-text);
   min-height: 100vh;
   line-height: 1.5;
-  position: relative;
 }
 
 .content-wrapper {
   position: relative;
-  z-index: 1;
   background: var(--color-bg);
-  /* min-height: 100vh; */
-  margin-bottom: 900px;
   margin-left: auto;
   margin-right: auto;
   padding: var(--space-lg) var(--space-md);
@@ -66,8 +61,9 @@ section {
 }
 
 h2 {
-  font-size: var( --font-size-lg);
-  font-weight: 500;
+  font-size: calc(var(--font-size-lg) * 1.2);
+  font-weight: 800;
+  font-family: 'Bricolage Grotesque', 'Outfit', sans-serif;
 }
 
 .hero-logo {
@@ -76,8 +72,9 @@ h2 {
 }
 
 .hero-title {
-  font-size: var(--font-size-xl);
-  font-weight: 500;
+  font-size: calc(var(--font-size-xl) * 1.2);
+  font-weight: 800;
+  font-family: 'Bricolage Grotesque', 'Outfit', sans-serif;
   margin-bottom: var(--space-xs);
   letter-spacing: -0.02rem;
 }
@@ -102,7 +99,7 @@ h2 {
 }
 .work-period {
   font-size: var(--font-size-sm);
-  color: #181818;
+  color: var(--color-text);
 }
 .work-place {
   font-size: var(--font-size-md);
@@ -111,7 +108,7 @@ h2 {
 }
 .work-desc {
   font-size: var(--font-size-sm);
-  color: #181818;
+  color: var(--color-text);
   opacity: 0.8;
 }
 
@@ -129,17 +126,12 @@ h2 {
   font-size: var(--font-size-sm);
 }
 
-/* On screens 900px wide or less, stack hero work items vertically and reduce gap */
 @media (max-width: 900px) {
   .hero-work {
     grid-template-columns: 1fr;
     gap: var(--space-md);
   }
 }
-
-
-
-/* Work Cards Section */
 
 .work-card {
   background: var(--color-card);
@@ -192,7 +184,7 @@ h2 {
 
 .work-card-desc {
   font-size: var(--font-size-base);
-  color: #181818;
+  color: var(--color-text);
   opacity: 0.95;
 }
 
@@ -250,7 +242,7 @@ h2 {
   display: inline-block;
   margin-top: 1.2rem;
   font-size: var(--font-size-base);
-  color: #181818;
+  color: var(--color-text);
   text-decoration: underline;
   cursor: pointer;
   font-weight: 400;
@@ -261,8 +253,6 @@ h2 {
   opacity: 0.7;
 }
 
-
-/* Speaking section */
 .speaking-item {
   display: flex;
   flex-direction: column;
@@ -284,7 +274,7 @@ h2 {
 
 .speaking-caption {
   font-size: var(--font-size-sm);
-  color: #181818;
+  color: var(--color-text);
   opacity: 0.85;
   margin-bottom: 0.7em;
 }
@@ -296,7 +286,6 @@ h2 {
   justify-content: flex-end;
 }
 
-/* Utillities */
 .card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -333,7 +322,7 @@ h2 {
 .contact-key {
   font-weight: 500;
   font-size: var(--font-size-md);
-  color: #181818;
+  color: var(--color-text);
   padding: var(--space-xs) 0;
 }
 
@@ -359,9 +348,6 @@ h2 {
   padding: var(--space-md) 0;
   text-align: center;
   width: 100%;
-  overflow: hidden;
-  z-index: 0;
-  position: fixed;
   bottom: 0;
   left: 0;
   pointer-events: none;
@@ -408,18 +394,6 @@ h2 {
   opacity: 0.8;
 }
 
-.footer-name {
-  font-size: clamp(2rem, 42vw, 100rem);
-  font-weight: 600;
-  color: var(--color-bg);
-  width: 100%;
-  text-align: center;
-  margin: 0 0 -4vw 0;
-  vertical-align: bottom;
-  line-height: 100%;
-  letter-spacing: -0.03em;
-  user-select: none;
-}
 
 .lets-talk-desc {
   font-size: var(--font-size-sm);
