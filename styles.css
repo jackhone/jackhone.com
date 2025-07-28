@@ -4,7 +4,7 @@
 */
 :root {
   --font-size-base: clamp(1.125rem, 1vw + 1rem, 1.5rem); /* 18px - 24px */
-  --font-size-xl: clamp(3rem, 4vw + 1rem, 3.5rem); /* 48px - 56px */
+  --font-size-xl: clamp(3rem, 4vw + 1rem, 10rem); /* 48px - 56px */
   --font-size-lg: clamp(2rem, 4vw + 1rem, 3rem); /* 32px - 48px */
   --font-size-md: clamp(1.5rem, 2vw + 1rem, 2rem); /* 24px - 36px */
   --font-size-sm: clamp(1rem, 0.5vw + 0.9rem, 1.3rem); /* 16px - 18px */
@@ -21,7 +21,7 @@
   --color-tag: #E6F0FF;
   --color-text: #301EFF;
   --color-border: #D1E3FF;
-  --color-footer: #301EFF;
+
 }
 
 * {
@@ -68,7 +68,16 @@ h2 {
 
 .hero-logo {
   align-self: start;
+  
   margin-bottom: var(--space-md);
+}
+
+.hero-logo img {
+  width:  calc(var(--font-size-xl) * 1.2);
+  height:  calc(var(--font-size-xl) * 1.2);
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
 }
 
 .hero-title {
@@ -371,7 +380,7 @@ h2 {
 
 .footer-text {
   font-size: var(--font-size-sm);
-  color: var(--color-bg);
+  color: var(--color-text);
   margin: 0;
   margin-right: 2rem;
   text-align: left;
@@ -379,19 +388,6 @@ h2 {
 
 .footer-logo {
   display: inline-block;
-}
-
-.footer-logo-img {
-  filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(1012%) hue-rotate(195deg) brightness(103%) contrast(101%);
-  width: 48px;
-  height: 48px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  pointer-events: auto;
-}
-
-.footer-logo-img:hover {
-  opacity: 0.8;
 }
 
 
