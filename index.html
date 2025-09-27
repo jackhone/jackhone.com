@@ -3,20 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jack Hone - Homepage</title>
+  <meta name="description" content="Craft focused designer with over a decade of experience building from zero to one. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jackhone.com/">
+  <meta property="og:title" content="Jack Hone · Product Designer">
+  <meta property="og:description" content="Craft focused designer with over a decade of experience building from zero to one. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
+  <meta property="og:image" content="https://jackhone.com/assets/og-image.png">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://jackhone.com/">
+  <meta property="twitter:title" content="Jack Hone · Product Designer">
+  <meta property="twitter:description" content="Craft focused designer with over a decade of experience building from zero to one. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
+  <meta property="twitter:image" content="https://jackhone.com/assets/twitter-image.png">
+  
+  <title>Jack Hone · Product Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div id="top"></div>
   <div class="content-wrapper">
-    <main class="container">
-      <section class="hero">
+    <main class="container" id="main">
+      <section class="hero-wrapper">
+        <div class="noise"></div>
+        <section class="hero">
         <div class="hero-logo" aria-label="Logo">
-          <img src="assets/logo-dark.svg" alt="Jack Hone logo" width="60" height="60">
+          <img src="assets/logo-light.svg" alt="Jack Hone logo" width="60" height="60">
         </div>
         <h1 class="hero-title">Jack Hone</h1>
         <p class="hero-tagline">Craft focused designer with over a decade of experience building from zero to one.</p>
@@ -44,93 +69,73 @@
         </div>
         <div class="hero-now">
           <div class="now-label">Now</div>
-          <div class="now-desc">Will soon be wrapping up a 10 week Runna training plan, goal is to eventually run a half-marathon. Put in some fast times recently, using Spotify DJ to get the right pace. On a more nerdy note, I've moved all my notes over to Obsidian, giving it a try.</div>
+          <div class="now-desc">Gym training twice a week now. Different weather, different energy. Loving Mix from Spotify, an intriguing use case, UI misses the mark. Still reaching for Notion over Obsidian, even with Claude Code.</div>
           <div class="now-updated" id="now-updated">Updated 1 day ago</div>
         </div>
+        </section>
       </section>
       <section id="work">
-        <h2>Work</h2>
-        <div class="card-grid">
-          <div class="work-card">
-            <div class="work-card-image">
-              <img src="assets/Easol.png" alt="Packages" class="work-card-img">
-              <span class="tag">Coming soon</span>
+        <h2 class="section-title">Work</h2>
+        <div class="work-grid">
+          <div class="work-row">
+            <div class="work-media">
+              <video class="work-video" autoplay muted loop playsinline webkit-playsinline aria-label="Point of Sale interface demonstration">
+                <source src="assets/POS.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
             </div>
-            <div class="work-card-content">
-              <h3 class="work-card-title">Packages</h3>
-              <p class="work-card-desc">Combine complex products into configurable bundles.</p>
+            <div class="work-content">
+              <h3 class="work-title">Easol Point of Sale</h3>
+              <p class="work-description">Redesigned the point of sale experience for tablet devices, focusing on usability and efficiency for retail staff.</p>
             </div>
           </div>
-          <div class="work-card">
-            <div class="work-card-image">
-              <img src="assets/Airbnb.png" alt="Airbnb Design System" class="work-card-img">
-              <span class="tag">Coming soon</span>
+          <div class="work-row">
+            <div class="work-media">
+              <video class="work-video" autoplay muted loop playsinline webkit-playsinline aria-label="Packages interface demonstration">
+                <source src="assets/Packages.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
             </div>
-            <div class="work-card-content">
-              <h3 class="work-card-title">Airbnb Design System</h3>
-              <p class="work-card-desc">Combine complex products into configurable bundles.</p>
+            <div class="work-content">
+              <h3 class="work-title">Easol Packages</h3>
+              <p class="work-description">Combine complex products into configurable bundles with an intuitive interface for creating and managing package offerings.</p>
+            </div>
+          </div>
+          <div class="work-row">
+            <div class="work-media">
+              <img src="assets/site-exp.png" alt="Easol platform interface showing improved user experience and navigation" class="work-image">
+            </div>
+            <div class="work-content">
+              <h3 class="work-title">Easol Site experience</h3>
+              <p class="work-description">Enhanced user experience across the platform with improved navigation, performance optimizations, and streamlined user flows.</p>
+            </div>
+          </div>
+          <div class="work-row">
+            <div class="work-media">
+              <img src="assets/Airbnb design system.png" alt="Airbnb Design System components and guidelines for internal tools" class="work-image">
+            </div>
+            <div class="work-content">
+              <h3 class="work-title">Airbnb Design System</h3>
+              <p class="work-description">Developed comprehensive design system components and guidelines for consistent user interface across Airbnb's internal tools and platforms.</p>
             </div>
           </div>
         </div>
-        <div class="work-table-wrapper">
-          <table class="work-table">
-            <thead>
-              <tr>
-                <th>Other work</th>
-                <th>Tags</th>
-              </tr>
-            </thead>
-            <tbody id="work-table-body">
-              <tr><td>Point of Sale</td><td><span class="tag">Tablet</span> <span class="tag">Research</span> <span class="tag">Visual</span><span class="tag">IXD</span></td></tr>
-              <tr><td>Reporting consistency improvements</td><td><span class="tag">Systems</span> <span class="tag">Data</span></td></tr>
-              <tr><td>PII redaction</td><td><span class="tag">Content</span><span class="tag">Compliance</span></td></tr>
-              <tr><td>Two factor authentication</td><td><span class="tag">Content</span></td></tr>
-              <tr><td>Terminal payments</td><td><span class="tag">Integration</span> <span class="tag">Onboarding</span></td></tr>
-              <tr class="extra-row"><td>Accessibility compliance</td><td><span class="tag">Inclusivity</span> <span class="tag">Systems</span></td></tr>
-              <tr class="extra-row"><td>Manual pay payment plans</td><td><span class="tag">Design led</span> <span class="tag">Content</span> <span class="tag">Desk research</span></td></tr>
-              <tr class="extra-row"><td>LBE creator site</td><td><span class="tag">Consumer</span> <span class="tag">Conversion</span> <span class="tag">Client</span></td></tr>
-              <tr class="extra-row"><td>Global artist tour site</td><td><span class="tag">Consumer</span> <span class="tag">Conversion</span> <span class="tag">Client</span></td></tr>
-              <tr class="extra-row"><td>Site experience improvements</td><td><span class="tag">Systems</span> <span class="tag">Conversion</span></td></tr>
-              <tr class="extra-row"><td>Reserved cart</td><td><span class="tag">Consumer</span> <span class="tag">Systems</span></td></tr>
-              <tr class="extra-row"><td>Flexible packages</td><td><span class="tag">Architecture</span> <span class="tag">Content</span></td></tr>
-              <tr class="extra-row"><td>US Sales Tax</td><td><span class="tag">Audit</span> <span class="tag">Leading</span></td></tr>
-              <tr class="extra-row"><td>Booking edits redesign</td><td><span class="tag">Visual</span> <span class="tag">AI</span></td></tr>
-              <tr class="extra-row"><td>Custom terms & conditions</td><td><span class="tag">Content</span></td></tr>
-            </tbody>
-          </table>
-          <a href="#" id="toggle-table" class="show-more-link">Show more</a>
-        </div>
-        <script>
-          const toggleLink = document.getElementById('toggle-table');
-          const extraRows = document.querySelectorAll('.extra-row');
-          let expanded = false;
-          function updateTable() {
-            extraRows.forEach(row => row.style.display = expanded ? '' : 'none');
-            toggleLink.textContent = expanded ? 'Show less' : 'Show more';
-          }
-          toggleLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            expanded = !expanded;
-            updateTable();
-          });
-          updateTable();
-        </script>
       </section>
       <!-- <section id="writing">
-        <h2>Writing</h1>
+        <h2>Writing</h2>
       </section> -->
       <section id="speaking">
-        <h2>Speaking</h2>
+        <h2 class="section-title">Speaking</h2>
         <div class="card-grid">
           <figure class="speaking-item">
-            <img src="assets/easol-showcase.png" alt="Easol Showcase" class="speaking-img">
+            <img src="assets/easol-showcase.png" alt="Easol Showcase Festivals Edition panel discussion" class="speaking-img">
             <figcaption>
               <div class="speaking-title">Easol Showcase Festivals Edition</div>
               <div class="speaking-caption">Panel host for Easol's second product showcase.</div>
             </figcaption>
           </figure>
           <figure class="speaking-item">
-            <img src="assets/image 6.png" alt="Easol Showcase" class="speaking-img">
+            <img src="assets/image 6.png" alt="Friends of Figma presentation on making apps and respecting people" class="speaking-img">
             <figcaption>
               <div class="speaking-title">How to make apps and respect people</div>
               <div class="speaking-caption">Presented for Friends of Figma alongside <a href="https://natbuckley.co.uk/" target="_blank" class="contact-link">Nat Buckley</a>.</div>
@@ -162,7 +167,7 @@
           </div>
           <div class="contact-row">
             <span class="contact-key">Threads</span>
-            <span class="contact-value"><a href="https://www.threads.com/jackhone target="_blank" rel="noopener" class="contact-link">@jackhone</a></span>
+            <span class="contact-value"><a href="https://www.threads.com/jackhone" target="_blank" rel="noopener" class="contact-link">@jackhone</a></span>
           </div>
           <div class="contact-row">
             <span class="contact-key">Email</span>
@@ -175,25 +180,21 @@
   <footer class="site-footer">
     <div class="footer-content-wrapper">
       <div class="footer-content">
-        <p class="footer-text">Built in North London with Cursor.</p>
-        <div class="footer-logo">
-          <img src="assets/logo-dark.svg" alt="Jack Hone logo" width="60" height="60" class="footer-logo-img" id="footer-logo">
+        <p class="footer-text">Built in North London with <a href="https://www.cursor.com/" target="_blank" rel="noopener" class="contact-link">Cursor</a>, typeset in <a href="https://ateliertriay.github.io/bricolage/" target="_blank" rel="noopener" class="contact-link">Bricolage Grotesque</a> and <a href="https://fonts.google.com/specimen/Outfit" target="_blank" rel="noopener" class="contact-link">Outfit</a>, hosted on <a href="https://github.com/jackhone/jackhone.com" target="_blank" rel="noopener" class="contact-link">Github</a>. This website does not collect or track user data.</p>
+        <!-- Clickable footer logo that scrolls to top when clicked -->
+        <div class="footer-logo" id="footer-logo">
+          <a href="#top" id="myBtn" title="Scroll to top" aria-label="Scroll to top of page">
+            <img src="assets/logo-dark.svg" alt="" width="60" height="60" class="footer-logo-img">
+          </a>
         </div>
       </div>
     </div>
   </footer>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('footer-logo').addEventListener('click', () => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
-
       // Function to calculate and display time difference
       function updateTimeDifference() {
-        const targetDate = new Date('2025-07-25');
+        const targetDate = new Date('2025-09-27');
         const currentDate = new Date();
         const diffTime = Math.abs(targetDate - currentDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
