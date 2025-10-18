@@ -39,6 +39,7 @@
     <main class="container" id="main">
       <section class="hero-wrapper">
         <div class="noise"></div>
+        <div class="cursor-gradient" id="cursor-gradient"></div>
         <section class="hero">
         <div class="hero-logo" aria-label="Logo">
           <img src="assets/logo-light.svg" alt="Jack Hone logo" width="60" height="60">
@@ -64,7 +65,7 @@
           <div class="work-item">
             <div class="work-period">2022 - Now</div>
             <div class="work-place"><a href="https://easol.com" target="_blank" rel="noopener" class="contact-link">Easol</a></div>
-            <div class="work-desc">Everything under the sun.</div>
+            <div class="work-desc">SaaS and consumer facing experiences.</div>
           </div>
         </div>
         <div class="hero-now">
@@ -162,7 +163,7 @@
       </section>
       <section id="lets-talk">
         <h2>Let's talk</h2>
-        <p class="lets-talk-desc">If my experience is relevant to you, hit me up! I'd love to chat to other designers working on similar projects, or founders at a similar stage to Easol.</p>
+        <p class="lets-talk-desc">If my experience is relevant, hit me up! I love sharing what I've learnt along the way.</p>
         <div class="contact-list">
           <div class="contact-row">
             <span class="contact-key">LinkedIn</span>
@@ -214,6 +215,62 @@
 
       // Call the function when the page loads
       updateTimeDifference();
+    });
+
+    // Cursor-following gradient animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const cursorGradient = document.getElementById('cursor-gradient');
+      const heroWrapper = document.querySelector('.hero-wrapper');
+      
+      if (cursorGradient && heroWrapper) {
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        let animationId;
+        
+        function updateGradientPosition(e) {
+          const rect = heroWrapper.getBoundingClientRect();
+          targetX = ((e.clientX - rect.left) / rect.width) * 100;
+          targetY = ((e.clientY - rect.top) / rect.height) * 100;
+        }
+        
+        function animateGradient() {
+          // Smooth interpolation with easing
+          const easing = 0.03;
+          currentX += (targetX - currentX) * easing;
+          currentY += (targetY - currentY) * easing;
+          
+          cursorGradient.style.background = `radial-gradient(circle at ${currentX}% ${currentY}%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%)`;
+          
+          // Continue animation if there's still movement
+          if (Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1) {
+            animationId = requestAnimationFrame(animateGradient);
+          }
+        }
+        
+        function startAnimation() {
+          if (!animationId) {
+            animationId = requestAnimationFrame(animateGradient);
+          }
+        }
+        
+        heroWrapper.addEventListener('mousemove', function(e) {
+          updateGradientPosition(e);
+          startAnimation();
+        });
+        
+        heroWrapper.addEventListener('mouseenter', function(e) {
+          updateGradientPosition(e);
+          startAnimation();
+        });
+        
+        heroWrapper.addEventListener('mouseleave', function() {
+          targetX = 0;
+          targetY = 0;
+          startAnimation();
+        });
+      }
     });
   </script>
 

@@ -8,6 +8,7 @@
   --font-size-lg: clamp(2rem, 4vw + 1rem, 3rem); /* 32px - 48px */
   --font-size-md: clamp(1.5rem, 2vw + 1rem, 2rem); /* 24px - 36px */
   --font-size-sm: clamp(1rem, 0.5vw + 0.9rem, 1.3rem); /* 16px - 18px */
+  --font-size-xs: clamp(0.875rem, 0.3vw + 0.8rem, 1rem); /* 14px - 16px */
 
   --space-xxs: clamp(0.1rem, .5vw, 0.5rem);   /* 8px - 16px */
   --space-xs: clamp(0.5rem, 1vw, 1rem);   /* 8px - 16px */
@@ -119,8 +120,8 @@ section {
 
 .work-description {
   font-size: var(--font-size-sm);
-  color: var(--color-text);
-  opacity: 0.85;
+  color: #666666;
+  font-weight: 350;
   margin-bottom: 0.7em;
 }
 
@@ -151,6 +152,11 @@ h2 {
   padding: clamp(2rem, 8vw, 8rem);
   border-radius: clamp(24px, 4vw, 48px);
   position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: crosshair;
 }
 
 .noise {
@@ -172,6 +178,19 @@ h2 {
   50% { transform: translateX(1px) translateY(2px); }
   75% { transform: translateX(-1px) translateY(1px); }
   100% { transform: translateX(0px) translateY(0px); }
+}
+
+.cursor-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%);
+  pointer-events: none;
+  border-radius: clamp(24px, 4vw, 48px);
+  transition: background 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
 }
 
 @-webkit-keyframes AnimationName {
@@ -268,6 +287,7 @@ h2 {
 .now-updated {
   font-size: var(--font-size-sm);
   color: white;
+  opacity: 0.8;
 }
 
 @media (max-width: 900px) {
@@ -316,9 +336,13 @@ h2 {
 
 .speaking-caption {
   font-size: var(--font-size-sm);
-  color: var(--color-text);
-  opacity: 0.85;
+  color: #666666;
+  font-weight: 350;
   margin-bottom: 0.7em;
+}
+
+.speaking-caption .contact-link {
+  color: #666666;
 }
 
 .speaking-item figcaption {
@@ -392,8 +416,11 @@ h2 {
 }
 
 .contact-link:focus {
-  outline: 2px solid var(--color-text);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-text);
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
 }
 
 /* Custom styling for work place links in hero section */
@@ -429,13 +456,19 @@ h2 {
 }
 
 .work-place .contact-link:focus {
-  outline: 2px solid white;
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px white;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
 }
 
 #myBtn:focus {
-  outline: 2px solid var(--color-text);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-text);
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
 }
 
 .site-footer {
@@ -464,12 +497,17 @@ h2 {
 }
 
 .footer-text {
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
+  font-size: var(--font-size-xs);
+  color: #666666;
+  font-weight: 350;
   margin: 0;
   margin-right: 2rem;
   text-align: left;
   max-width: 800px;
+}
+
+.footer-text .contact-link {
+  color: #666666;
 }
 
 .footer-logo {
@@ -490,13 +528,12 @@ h2 {
   opacity: 0.7;
 }
 
-#myBtn:focus {
-  outline: none;
-}
 
 
 .lets-talk-desc {
   font-size: var(--font-size-sm);
+  color: #666666;
+  font-weight: 350;
   margin-bottom: var(--space-sm);
   max-width: 800px;
 }
