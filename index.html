@@ -290,14 +290,24 @@
       if (!readingGrid) return;
 
       const maxVisiblePerSection = 5;
+      const expandedHeightMultiplier = 1.5;
+      const justToggledKeys = new Set();
       const expandedStatuses = new Set();
       let currentItems = [];
-      const statusOrder = ['finished', 'in_progress', 'up_next'];
+      const statusOrder = ['completed', 'in_progress', 'up_next'];
       const statusMeta = {
         up_next: { label: 'Up next', className: 'status-up-next' },
         in_progress: { label: 'In Progress', className: 'status-in-progress' },
-        finished: { label: 'Finished', className: 'status-finished' }
+        completed: { label: 'Completed', className: 'status-completed' }
       };
+
+      function truncateTitleAtWord(text, maxLen) {
+        if (!text || text.length <= maxLen) return text;
+        const slice = text.slice(0, maxLen);
+        const lastSpace = slice.lastIndexOf(' ');
+        const cut = lastSpace > 0 ? lastSpace : maxLen;
+        return text.slice(0, cut).trim() + '\u2026';
+      }
 
       function createBookRow(book) {
         const row = document.createElement('article');
@@ -309,7 +319,7 @@
         const title = document.createElement('span');
         title.className = 'reading-book-title';
         const fullTitle = book.title || 'Untitled';
-        title.textContent = fullTitle;
+        title.textContent = truncateTitleAtWord(fullTitle, 52);
         title.title = fullTitle;
         line.appendChild(title);
 
@@ -335,6 +345,7 @@
           } else {
             expandedStatuses.add(statusKey);
           }
+          justToggledKeys.add(statusKey);
           renderReading(currentItems);
         });
         return button;
@@ -353,8 +364,18 @@
         }
 
         statusOrder.forEach((statusKey) => {
-          const groupItems = items.filter((item) => item.status === statusKey);
+          let groupItems = items.filter((item) => item.status === statusKey);
           if (!groupItems.length) return;
+          groupItems = groupItems.slice().sort((a, b) => {
+            if (statusKey === 'completed') {
+              const aDate = (a.date_read && Date.parse(a.date_read)) || 0;
+              const bDate = (b.date_read && Date.parse(b.date_read)) || 0;
+              return bDate - aDate;
+            }
+            const aDate = (a.date_added && Date.parse(a.date_added)) || (a.updated_at && Date.parse(a.updated_at)) || 0;
+            const bDate = (b.date_added && Date.parse(b.date_added)) || (b.updated_at && Date.parse(b.updated_at)) || 0;
+            return bDate - aDate;
+          });
 
           const group = document.createElement('section');
           group.className = 'reading-group';
@@ -366,17 +387,66 @@
 
           const list = document.createElement('div');
           list.className = 'reading-group-list';
-          const visibleItems = expandedStatuses.has(statusKey)
+          const isExpanded = expandedStatuses.has(statusKey);
+          const visibleItems = isExpanded
             ? groupItems
             : groupItems.slice(0, maxVisiblePerSection);
           visibleItems.forEach((book) => list.appendChild(createBookRow(book)));
           group.appendChild(list);
 
-          if (groupItems.length > maxVisiblePerSection) {
+          if (groupItems.length > maxVisiblePerSection && statusKey !== 'in_progress') {
             group.appendChild(createShowMoreButton(statusKey, groupItems.length));
           }
 
           readingGrid.appendChild(group);
+
+          if (groupItems.length > maxVisiblePerSection) {
+            const firstRow = list.querySelector('.reading-book');
+            if (firstRow) {
+              const rowHeight = firstRow.getBoundingClientRect().height || 48;
+              const collapsedHeight = rowHeight * maxVisiblePerSection;
+              const expandedScrollHeight = Math.ceil(collapsedHeight * expandedHeightMultiplier);
+              const fadeHeight = Math.max(0, (expandedScrollHeight - collapsedHeight) / 2);
+
+              const wrap = document.createElement('div');
+              wrap.className = 'reading-group-list-wrap';
+              wrap.style.setProperty('--reading-fade-height', `${fadeHeight}px`);
+              wrap.style.setProperty('--reading-fade-top-height', '2rem');
+              const collapsedMax = `calc(2rem + ${collapsedHeight}px)`;
+              const expandedMax = `calc(2rem + ${expandedScrollHeight}px)`;
+              const shouldAnimate = justToggledKeys.has(statusKey);
+              if (shouldAnimate) justToggledKeys.delete(statusKey);
+              if (shouldAnimate) {
+                wrap.style.maxHeight = isExpanded ? collapsedMax : expandedMax;
+                group.replaceChild(wrap, list);
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    wrap.style.maxHeight = isExpanded ? expandedMax : collapsedMax;
+                  });
+                });
+              } else {
+                wrap.style.maxHeight = isExpanded ? expandedMax : collapsedMax;
+                group.replaceChild(wrap, list);
+              }
+              wrap.appendChild(list);
+
+              const fadeTop = document.createElement('div');
+              fadeTop.className = 'reading-group-list-fade reading-group-list-fade-top';
+              fadeTop.setAttribute('aria-hidden', 'true');
+              wrap.insertBefore(fadeTop, list);
+
+              list.style.paddingTop = '2rem';
+
+              if (isExpanded) {
+                list.style.maxHeight = `calc(2rem + ${expandedScrollHeight}px)`;
+                list.style.overflowY = 'auto';
+                const fade = document.createElement('div');
+                fade.className = 'reading-group-list-fade';
+                fade.setAttribute('aria-hidden', 'true');
+                wrap.appendChild(fade);
+              }
+            }
+          }
         });
       }
 
@@ -389,9 +459,15 @@
         })
         .then((data) => {
           const items = Array.isArray(data.items) ? data.items : [];
-          renderReading(items);
+          try {
+            renderReading(items);
+          } catch (err) {
+            console.error('renderReading error:', err);
+            throw err;
+          }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error('Reading list load error:', err);
           readingGrid.innerHTML = '';
           const error = document.createElement('p');
           error.className = 'reading-empty';

@@ -390,12 +390,14 @@ h2 {
 
 .reading-group {
   align-items: start;
+  margin-bottom: var(--space-md);
 }
 
 .reading-group-title {
   font-size: var(--font-size-sm);
   font-weight: 500;
   color: #000000;
+  padding: 2rem 0;
 }
 
 .reading-group-list {
@@ -404,13 +406,58 @@ h2 {
   flex-direction: column;
 }
 
+.reading-group-list-wrap {
+  grid-column: 2;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: max-height 0.35s ease-out;
+}
+
+.reading-group-list-wrap .reading-group-list {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.reading-group-list-wrap .reading-group-list::-webkit-scrollbar {
+  display: none;
+}
+
+.reading-group-list-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--reading-fade-height, 80px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.reading-group-list-fade:not(.reading-group-list-fade-top) {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, var(--color-bg) 100%);
+}
+
+.reading-group-list-fade-top {
+  top: 0;
+  height: var(--reading-fade-top-height, 2rem);
+  background: linear-gradient(to bottom, var(--color-bg) 0%, transparent 100%);
+}
+
 .reading-book {
-  padding: 0.7rem 0;
+  padding: 1rem 0;
   display: block;
 }
 
-.reading-book:not(:last-child) {
-  border-bottom: 1px solid var(--color-border);
+.reading-group-list .reading-book:first-child {
+  padding-top: 0;
+}
+
+.reading-group-list .reading-book:last-child {
+  margin-bottom: 1rem;
 }
 
 .reading-book-line {
@@ -423,7 +470,7 @@ h2 {
 .reading-book-title {
   display: block;
   font-size: var(--font-size-sm);
-  font-weight: 500;
+  font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -440,7 +487,9 @@ h2 {
 
 .reading-show-more {
   grid-column: 2;
-  margin-top: var(--space-xs);
+  margin-top: var(--space-sm);
+  position: relative;
+  z-index: 1;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -491,15 +540,38 @@ h2 {
   }
   .reading-group-title,
   .reading-group-list,
+  .reading-group-list-wrap,
   .reading-show-more {
     grid-column: 1;
   }
   .reading-group-title {
     margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .reading-book-line {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .reading-book-author {
+    text-align: left;
   }
   .reading-book {
     flex-direction: column;
     align-items: flex-start;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+  .reading-show-more {
+    display: none;
+  }
+  .reading-group-list-wrap .reading-group-list,
+  .reading-group-list {
+    padding-top: 0.5rem !important;
+  }
+  .reading-group-list-fade,
+  .reading-group-list-fade-top {
+    display: none;
   }
 }
 
