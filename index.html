@@ -134,9 +134,12 @@
           </div>
         </div>
       </section>
-      <!-- <section id="writing">
-        <h2>Writing</h2>
-      </section> -->
+      <section id="reading">
+        <h2 class="section-title">Reading</h2>
+        <div class="reading-grid" id="reading-grid" aria-live="polite">
+          <p class="reading-empty">Loading reading list...</p>
+        </div>
+      </section>
       <section id="speaking">
         <h2 class="section-title">Speaking</h2>
         <div class="card-grid">
@@ -280,6 +283,121 @@
           startAnimation();
         });
       }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const readingGrid = document.getElementById('reading-grid');
+      if (!readingGrid) return;
+
+      const maxVisiblePerSection = 5;
+      const expandedStatuses = new Set();
+      let currentItems = [];
+      const statusOrder = ['finished', 'in_progress', 'up_next'];
+      const statusMeta = {
+        up_next: { label: 'Up next', className: 'status-up-next' },
+        in_progress: { label: 'In Progress', className: 'status-in-progress' },
+        finished: { label: 'Finished', className: 'status-finished' }
+      };
+
+      function createBookRow(book) {
+        const row = document.createElement('article');
+        row.className = 'reading-book';
+
+        const line = document.createElement('p');
+        line.className = 'reading-book-line';
+
+        const title = document.createElement('span');
+        title.className = 'reading-book-title';
+        const fullTitle = book.title || 'Untitled';
+        title.textContent = fullTitle;
+        title.title = fullTitle;
+        line.appendChild(title);
+
+        const author = document.createElement('span');
+        author.className = 'reading-book-author';
+        author.textContent = book.authors || 'Unknown author';
+        line.appendChild(author);
+
+        row.appendChild(line);
+
+        return row;
+      }
+
+      function createShowMoreButton(statusKey, totalCount) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'reading-show-more';
+        const isExpanded = expandedStatuses.has(statusKey);
+        button.textContent = isExpanded ? 'Show less' : 'Show more';
+        button.addEventListener('click', function() {
+          if (expandedStatuses.has(statusKey)) {
+            expandedStatuses.delete(statusKey);
+          } else {
+            expandedStatuses.add(statusKey);
+          }
+          renderReading(currentItems);
+        });
+        return button;
+      }
+
+      function renderReading(items) {
+        currentItems = items;
+        readingGrid.innerHTML = '';
+
+        if (!items.length) {
+          const empty = document.createElement('p');
+          empty.className = 'reading-empty';
+          empty.textContent = 'No books yet. Add one in your admin page to publish it here.';
+          readingGrid.appendChild(empty);
+          return;
+        }
+
+        statusOrder.forEach((statusKey) => {
+          const groupItems = items.filter((item) => item.status === statusKey);
+          if (!groupItems.length) return;
+
+          const group = document.createElement('section');
+          group.className = 'reading-group';
+
+          const heading = document.createElement('h3');
+          heading.className = 'reading-group-title';
+          heading.textContent = `${statusMeta[statusKey].label}`;
+          group.appendChild(heading);
+
+          const list = document.createElement('div');
+          list.className = 'reading-group-list';
+          const visibleItems = expandedStatuses.has(statusKey)
+            ? groupItems
+            : groupItems.slice(0, maxVisiblePerSection);
+          visibleItems.forEach((book) => list.appendChild(createBookRow(book)));
+          group.appendChild(list);
+
+          if (groupItems.length > maxVisiblePerSection) {
+            group.appendChild(createShowMoreButton(statusKey, groupItems.length));
+          }
+
+          readingGrid.appendChild(group);
+        });
+      }
+
+      fetch('reading/reading.json', { cache: 'no-store' })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Reading data request failed: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const items = Array.isArray(data.items) ? data.items : [];
+          renderReading(items);
+        })
+        .catch(() => {
+          readingGrid.innerHTML = '';
+          const error = document.createElement('p');
+          error.className = 'reading-empty';
+          error.textContent = 'Could not load reading list right now.';
+          readingGrid.appendChild(error);
+        });
     });
   </script>
 
