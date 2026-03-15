@@ -517,6 +517,9 @@ h2 {
 }
 
 @media (max-width: 700px) {
+  #reading {
+    display: none;
+  }
   .card-grid {
     grid-template-columns: 1fr;
   }
