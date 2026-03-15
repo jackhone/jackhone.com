@@ -134,9 +134,12 @@
           </div>
         </div>
       </section>
-      <!-- <section id="writing">
-        <h2>Writing</h2>
-      </section> -->
+      <section id="reading">
+        <h2 class="section-title">Reading</h2>
+        <div class="reading-grid" id="reading-grid" aria-live="polite">
+          <p class="reading-empty">Loading reading list...</p>
+        </div>
+      </section>
       <section id="speaking">
         <h2 class="section-title">Speaking</h2>
         <div class="card-grid">
@@ -280,6 +283,197 @@
           startAnimation();
         });
       }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const readingGrid = document.getElementById('reading-grid');
+      if (!readingGrid) return;
+
+      const maxVisiblePerSection = 5;
+      const expandedHeightMultiplier = 1.5;
+      const justToggledKeys = new Set();
+      const expandedStatuses = new Set();
+      let currentItems = [];
+      const statusOrder = ['completed', 'in_progress', 'up_next'];
+      const statusMeta = {
+        up_next: { label: 'Up next', className: 'status-up-next' },
+        in_progress: { label: 'In Progress', className: 'status-in-progress' },
+        completed: { label: 'Completed', className: 'status-completed' }
+      };
+
+      function truncateTitleAtWord(text, maxLen) {
+        if (!text || text.length <= maxLen) return text;
+        const slice = text.slice(0, maxLen);
+        const lastSpace = slice.lastIndexOf(' ');
+        const cut = lastSpace > 0 ? lastSpace : maxLen;
+        return text.slice(0, cut).trim() + '\u2026';
+      }
+
+      function createBookRow(book) {
+        const row = document.createElement('article');
+        row.className = 'reading-book';
+
+        const line = document.createElement('p');
+        line.className = 'reading-book-line';
+
+        const title = document.createElement('span');
+        title.className = 'reading-book-title';
+        const fullTitle = book.title || 'Untitled';
+        title.textContent = truncateTitleAtWord(fullTitle, 52);
+        title.title = fullTitle;
+        line.appendChild(title);
+
+        const author = document.createElement('span');
+        author.className = 'reading-book-author';
+        author.textContent = book.authors || 'Unknown author';
+        line.appendChild(author);
+
+        row.appendChild(line);
+
+        return row;
+      }
+
+      function createShowMoreButton(statusKey, totalCount) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'reading-show-more';
+        const isExpanded = expandedStatuses.has(statusKey);
+        button.textContent = isExpanded ? 'Show less' : 'Show more';
+        button.addEventListener('click', function() {
+          if (expandedStatuses.has(statusKey)) {
+            expandedStatuses.delete(statusKey);
+          } else {
+            expandedStatuses.add(statusKey);
+          }
+          justToggledKeys.add(statusKey);
+          renderReading(currentItems);
+        });
+        return button;
+      }
+
+      function renderReading(items) {
+        currentItems = items;
+        readingGrid.innerHTML = '';
+
+        if (!items.length) {
+          const empty = document.createElement('p');
+          empty.className = 'reading-empty';
+          empty.textContent = 'No books yet. Add one in your admin page to publish it here.';
+          readingGrid.appendChild(empty);
+          return;
+        }
+
+        statusOrder.forEach((statusKey) => {
+          let groupItems = items.filter((item) => item.status === statusKey);
+          if (!groupItems.length) return;
+          groupItems = groupItems.slice().sort((a, b) => {
+            if (statusKey === 'completed') {
+              const aDate = (a.date_read && Date.parse(a.date_read)) || 0;
+              const bDate = (b.date_read && Date.parse(b.date_read)) || 0;
+              return bDate - aDate;
+            }
+            const aDate = (a.date_added && Date.parse(a.date_added)) || (a.updated_at && Date.parse(a.updated_at)) || 0;
+            const bDate = (b.date_added && Date.parse(b.date_added)) || (b.updated_at && Date.parse(b.updated_at)) || 0;
+            return bDate - aDate;
+          });
+
+          const group = document.createElement('section');
+          group.className = 'reading-group';
+
+          const heading = document.createElement('h3');
+          heading.className = 'reading-group-title';
+          heading.textContent = `${statusMeta[statusKey].label}`;
+          group.appendChild(heading);
+
+          const list = document.createElement('div');
+          list.className = 'reading-group-list';
+          const isExpanded = expandedStatuses.has(statusKey);
+          const visibleItems = isExpanded
+            ? groupItems
+            : groupItems.slice(0, maxVisiblePerSection);
+          visibleItems.forEach((book) => list.appendChild(createBookRow(book)));
+          group.appendChild(list);
+
+          if (groupItems.length > maxVisiblePerSection && statusKey !== 'in_progress') {
+            group.appendChild(createShowMoreButton(statusKey, groupItems.length));
+          }
+
+          readingGrid.appendChild(group);
+
+          if (groupItems.length > maxVisiblePerSection) {
+            const firstRow = list.querySelector('.reading-book');
+            if (firstRow) {
+              const rowHeight = firstRow.getBoundingClientRect().height || 48;
+              const collapsedHeight = rowHeight * maxVisiblePerSection;
+              const expandedScrollHeight = Math.ceil(collapsedHeight * expandedHeightMultiplier);
+              const fadeHeight = Math.max(0, (expandedScrollHeight - collapsedHeight) / 2);
+
+              const wrap = document.createElement('div');
+              wrap.className = 'reading-group-list-wrap';
+              wrap.style.setProperty('--reading-fade-height', `${fadeHeight}px`);
+              wrap.style.setProperty('--reading-fade-top-height', '2rem');
+              const collapsedMax = `calc(2rem + ${collapsedHeight}px)`;
+              const expandedMax = `calc(2rem + ${expandedScrollHeight}px)`;
+              const shouldAnimate = justToggledKeys.has(statusKey);
+              if (shouldAnimate) justToggledKeys.delete(statusKey);
+              if (shouldAnimate) {
+                wrap.style.maxHeight = isExpanded ? collapsedMax : expandedMax;
+                group.replaceChild(wrap, list);
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    wrap.style.maxHeight = isExpanded ? expandedMax : collapsedMax;
+                  });
+                });
+              } else {
+                wrap.style.maxHeight = isExpanded ? expandedMax : collapsedMax;
+                group.replaceChild(wrap, list);
+              }
+              wrap.appendChild(list);
+
+              const fadeTop = document.createElement('div');
+              fadeTop.className = 'reading-group-list-fade reading-group-list-fade-top';
+              fadeTop.setAttribute('aria-hidden', 'true');
+              wrap.insertBefore(fadeTop, list);
+
+              list.style.paddingTop = '2rem';
+
+              if (isExpanded) {
+                list.style.maxHeight = `calc(2rem + ${expandedScrollHeight}px)`;
+                list.style.overflowY = 'auto';
+                const fade = document.createElement('div');
+                fade.className = 'reading-group-list-fade';
+                fade.setAttribute('aria-hidden', 'true');
+                wrap.appendChild(fade);
+              }
+            }
+          }
+        });
+      }
+
+      fetch('reading/reading.json', { cache: 'no-store' })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Reading data request failed: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const items = Array.isArray(data.items) ? data.items : [];
+          try {
+            renderReading(items);
+          } catch (err) {
+            console.error('renderReading error:', err);
+            throw err;
+          }
+        })
+        .catch((err) => {
+          console.error('Reading list load error:', err);
+          readingGrid.innerHTML = '';
+          const error = document.createElement('p');
+          error.className = 'reading-empty';
+          error.textContent = 'Could not load reading list right now.';
+          readingGrid.appendChild(error);
+        });
     });
   </script>
 
