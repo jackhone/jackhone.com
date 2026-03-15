@@ -569,6 +569,11 @@ h2 {
   .reading-group-list {
     padding-top: 0.5rem !important;
   }
+  .reading-group-list-wrap {
+    max-height: none !important;
+    overflow: visible;
+    height: auto;
+  }
   .reading-group-list-fade,
   .reading-group-list-fade-top {
     display: none;
