@@ -3,29 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Craft focused designer with over a decade of experience building from zero to one. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
+  <meta name="description" content="I design tools for real-life connection by simplifying the inherent complexity of shared space and time. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jackhone.com/">
   <meta property="og:title" content="Jack Hone">
-  <meta property="og:description" content="Craft focused designer with over a decade of experience building from zero to one. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
+  <meta property="og:description" content="I design tools for real-life connection by simplifying the inherent complexity of shared space and time. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
   <meta property="og:image" content="https://jackhone.com/assets/og-image.png">
   
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://jackhone.com/">
   <meta property="twitter:title" content="Jack Hone">
-  <meta property="twitter:description" content="Craft focused designer with over a decade of experience building from zero to one. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
+  <meta property="twitter:description" content="I design tools for real-life connection by simplifying the inherent complexity of shared space and time. Previously at ustwo, Airbnb, Bulb Energy, and now at Easol.">
   <meta property="twitter:image" content="https://jackhone.com/assets/twitter-image.png">
   
   <title>Jack Hone · Product Designer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -47,14 +44,12 @@
   <div class="content-wrapper">
     <main class="container" id="main">
       <section class="hero-wrapper">
-        <div class="noise"></div>
-        <div class="cursor-gradient" id="cursor-gradient"></div>
         <section class="hero">
         <div class="hero-logo" aria-label="Logo">
-          <img src="assets/logo-light.svg" alt="Jack Hone logo" width="60" height="60">
+          <img src="assets/logo-dark.svg" alt="Jack Hone logo" width="60" height="60">
         </div>
         <h1 class="hero-title">Jack Hone</h1>
-        <p class="hero-tagline">Craft focused designer with over a decade of experience building from zero to one.</p>
+        <p class="hero-tagline">I design tools for real-life connection by simplifying the inherent complexity of shared space and time.</p>
         <div class="hero-work">
           <div class="work-item">
             <div class="work-period">2014 - 2017</div>
@@ -77,11 +72,13 @@
             <div class="work-desc">SaaS and consumer facing experiences.</div>
           </div>
         </div>
+        <!--
         <div class="hero-now">
           <div class="now-label">Now</div>
           <div class="now-desc">Just got back from a lads ski trip in St. Anton and a long weekend in the Cotswolds with friends. Leaning into a quiet hibernatory stretch — going harder on coding and tinkering with this site. You might have already spotted some updates.</div>
           <div class="now-updated" id="now-updated">Updated 1 day ago</div>
         </div>
+        -->
         </section>
       </section>
       <section id="work">
@@ -134,12 +131,15 @@
           </div>
         </div>
       </section>
+      <!--
       <section id="reading">
         <h2 class="section-title">Reading</h2>
         <div class="reading-grid" id="reading-grid" aria-live="polite">
           <p class="reading-empty">Loading reading list...</p>
         </div>
       </section>
+      -->
+      <!--
       <section id="speaking">
         <h2 class="section-title">Speaking</h2>
         <div class="card-grid">
@@ -173,21 +173,22 @@
           </figure>
         </div>
       </section>
+      -->
       <section id="lets-talk">
         <h2>Let's talk</h2>
-        <p class="lets-talk-desc">If my experience is relevant, hit me up! I love sharing what I've learnt along the way.</p>
+        <p class="lets-talk-desc">Open to connecting if there's a good fit.</p>
         <div class="contact-list">
           <div class="contact-row">
             <span class="contact-key">LinkedIn</span>
-            <span class="contact-value"><a href="https://www.linkedin.com/in/jackhone" target="_blank" rel="noopener" class="contact-link">@jackhone</a></span>
+            <span class="contact-value"><a href="https://www.linkedin.com/in/jackhone" target="_blank" rel="noopener" class="contact-link contact-link--external">@jackhone</a></span>
           </div>
           <div class="contact-row">
             <span class="contact-key">Threads</span>
-            <span class="contact-value"><a href="https://www.threads.com/jackhone" target="_blank" rel="noopener" class="contact-link">@jackhone</a></span>
+            <span class="contact-value"><a href="https://www.threads.com/jackhone" target="_blank" rel="noopener" class="contact-link contact-link--external">@jackhone</a></span>
           </div>
           <div class="contact-row">
             <span class="contact-key">Email</span>
-            <span class="contact-value"><a href="mailto:jackhone@gmail.com" class="contact-link">jackhone@gmail.com</a></span>
+            <span class="contact-value"><button type="button" class="contact-link contact-link--copy" id="contact-email" data-copy-email="jackhone@gmail.com" title="Click to copy">jackhone@gmail.com<span class="contact-link-icon" aria-hidden="true"><span class="contact-link-icon-layer contact-link-icon-copy"></span><span class="contact-link-icon-layer contact-link-icon-check"></span></span></button></span>
           </div>
         </div>
       </section>
@@ -196,7 +197,7 @@
   <footer class="site-footer">
     <div class="footer-content-wrapper">
       <div class="footer-content">
-        <p class="footer-text">Built in North London with <a href="https://www.cursor.com/" target="_blank" rel="noopener" class="contact-link">Cursor</a>, typeset in <a href="https://ateliertriay.github.io/bricolage/" target="_blank" rel="noopener" class="contact-link">Bricolage Grotesque</a> and <a href="https://fonts.google.com/specimen/Outfit" target="_blank" rel="noopener" class="contact-link">Outfit</a>, hosted on <a href="https://github.com/jackhone/jackhone.com" target="_blank" rel="noopener" class="contact-link">Github</a>.</p>
+        <p class="footer-text">Built in North London with <a href="https://www.cursor.com/" target="_blank" rel="noopener" class="contact-link">Cursor</a>, typeset in <a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="contact-link">Inter</a>, hosted on <a href="https://github.com/jackhone/jackhone.com" target="_blank" rel="noopener" class="contact-link">Github</a>.</p>
         <!-- Clickable footer logo that scrolls to top when clicked -->
         <div class="footer-logo" id="footer-logo">
           <a href="#top" id="myBtn" title="Scroll to top" aria-label="Scroll to top of page">
@@ -207,8 +208,8 @@
     </div>
   </footer>
   <script>
+    /*
     document.addEventListener('DOMContentLoaded', function() {
-      // Function to calculate and display time difference
       function updateTimeDifference() {
         const targetDate = new Date('2026-03-14');
         const currentDate = new Date();
@@ -225,66 +226,11 @@
         }
       }
 
-      // Call the function when the page loads
       updateTimeDifference();
     });
+    */
 
-    // Cursor-following gradient animation
-    document.addEventListener('DOMContentLoaded', function() {
-      const cursorGradient = document.getElementById('cursor-gradient');
-      const heroWrapper = document.querySelector('.hero-wrapper');
-      
-      if (cursorGradient && heroWrapper) {
-        let targetX = 0;
-        let targetY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        let animationId;
-        
-        function updateGradientPosition(e) {
-          const rect = heroWrapper.getBoundingClientRect();
-          targetX = ((e.clientX - rect.left) / rect.width) * 100;
-          targetY = ((e.clientY - rect.top) / rect.height) * 100;
-        }
-        
-        function animateGradient() {
-          // Smooth interpolation with easing
-          const easing = 0.03;
-          currentX += (targetX - currentX) * easing;
-          currentY += (targetY - currentY) * easing;
-          
-          cursorGradient.style.background = `radial-gradient(circle at ${currentX}% ${currentY}%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%)`;
-          
-          // Continue animation if there's still movement
-          if (Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1) {
-            animationId = requestAnimationFrame(animateGradient);
-          }
-        }
-        
-        function startAnimation() {
-          if (!animationId) {
-            animationId = requestAnimationFrame(animateGradient);
-          }
-        }
-        
-        heroWrapper.addEventListener('mousemove', function(e) {
-          updateGradientPosition(e);
-          startAnimation();
-        });
-        
-        heroWrapper.addEventListener('mouseenter', function(e) {
-          updateGradientPosition(e);
-          startAnimation();
-        });
-        
-        heroWrapper.addEventListener('mouseleave', function() {
-          targetX = 0;
-          targetY = 0;
-          startAnimation();
-        });
-      }
-    });
-
+    /*
     document.addEventListener('DOMContentLoaded', function() {
       const readingGrid = document.getElementById('reading-grid');
       if (!readingGrid) return;
@@ -475,6 +421,49 @@
           error.textContent = 'Could not load reading list right now.';
           readingGrid.appendChild(error);
         });
+    });
+    */
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const emailLink = document.getElementById('contact-email');
+      if (!emailLink) return;
+
+      let copyTimeout;
+
+      emailLink.addEventListener('click', function() {
+        const email = emailLink.dataset.copyEmail || emailLink.textContent.trim();
+
+        function showCopied() {
+          emailLink.classList.add('contact-link--copied');
+          if (copyTimeout) window.clearTimeout(copyTimeout);
+          copyTimeout = window.setTimeout(function() {
+            emailLink.classList.remove('contact-link--copied');
+          }, 1500);
+        }
+
+        function fallbackCopy() {
+          const textarea = document.createElement('textarea');
+          textarea.value = email;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'absolute';
+          textarea.style.left = '-9999px';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            showCopied();
+          } catch (err) {
+            // ignore
+          }
+          document.body.removeChild(textarea);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(showCopied).catch(fallbackCopy);
+        } else {
+          fallbackCopy();
+        }
+      });
     });
   </script>
 
