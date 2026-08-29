@@ -3,12 +3,13 @@
   - Fluid type and spacing using clamp for responsive design
 */
 :root {
-  --font-size-base: clamp(1.125rem, 1vw + 1rem, 1.5rem);
+  --font-size-base: clamp(0.875rem, 1vw + 0.75rem, 1.25rem);
   --font-size-xl: var(--font-size-base);
   --font-size-lg: var(--font-size-base);
   --font-size-md: var(--font-size-base);
   --font-size-sm: var(--font-size-base);
   --font-size-xs: var(--font-size-base);
+  --font-size-title: 1.75rem;
 
   --space-xxs: clamp(0.1rem, .5vw, 0.5rem);
   --space-xs: clamp(0.5rem, 1vw, 1rem);
@@ -192,6 +193,7 @@ h2,
 }
 
 .hero-title {
+  font-size: var(--font-size-title);
   font-weight: var(--heading-weight);
   margin-bottom: var(--space-xs);
   letter-spacing: -0.01em;
