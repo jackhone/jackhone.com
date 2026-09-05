@@ -13,6 +13,7 @@ const RISE_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const FADE_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
 const SPLIT_OPTIONS = { type: ["lines"], mask: { lines: "0.3em" } };
 const PENDING_CLASS = "text-reveal-pending";
+const FONT_BUDGET = 1000;
 
 const splits = new Map();
 const order = new Map();
@@ -138,10 +139,20 @@ async function init() {
   }
   document.documentElement.classList.remove(PENDING_CLASS);
 
-  try {
-    await document.fonts.ready;
-  } catch {
-    // A font that never resolves is still worth splitting for.
+  // Lines can only be cut against the face the text will be read in, so the split waits on the
+  // fonts. A font that is slow is not worth a blank page though, so past the budget the copy is
+  // handed back as it is and the reveal is dropped.
+  const fonts = document.fonts.ready.then(
+    () => true,
+    () => true
+  );
+  const budget = new Promise((resolve) => window.setTimeout(() => resolve(false), FONT_BUDGET));
+
+  if (!(await Promise.race([fonts, budget]))) {
+    for (const target of targets) {
+      show(target);
+    }
+    return;
   }
 
   try {
@@ -187,8 +198,9 @@ async function init() {
   }
 }
 
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  document.documentElement.classList.remove(PENDING_CLASS);
-} else {
+// The head script adds the class only when it wants a reveal, and takes it away again once it has
+// given up waiting for this module. Either way the class still being here is what says the copy is
+// hidden and ours to show; without it the page is already painted and best left alone.
+if (document.documentElement.classList.contains(PENDING_CLASS)) {
   init();
 }

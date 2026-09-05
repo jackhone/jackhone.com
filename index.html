@@ -30,16 +30,20 @@
   <link rel="manifest" href="/site.webmanifest">
   <script>
     // Hold the copy back before it is ever painted, so the reveal starts from nothing. If the module
-    // never runs, the timeout hands the page back untouched.
+    // never runs, the timeout hands the page back untouched, and a module that turns up after that
+    // finds the class gone and leaves the painted copy alone rather than hiding it all over again.
     (function () {
       if (!('animate' in Element.prototype) || !('IntersectionObserver' in window)) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       document.documentElement.classList.add('text-reveal-pending');
       window.setTimeout(function () {
         document.documentElement.classList.remove('text-reveal-pending');
-      }, 4000);
+      }, 1500);
     })();
   </script>
+  <!-- kugiri is only discovered once text-reveal.js has been fetched and parsed, which is a round
+       trip the copy would spend hidden. -->
+  <link rel="modulepreload" href="vendor/kugiri.js">
   <script type="module" src="text-reveal.js"></script>
   <!-- Posthog -->
   <script>
