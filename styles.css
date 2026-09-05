@@ -764,6 +764,16 @@ h2,
   max-width: 800px;
 }
 
+/*
+  Text reveal (kugiri)
+  The copy is held back until the split has run and its lines have been given an animation to rise
+  with. text-reveal.js takes the hold over inline before the class comes off, and the class also
+  comes off on its own after four seconds so a page whose script never runs is only ever late.
+*/
+.text-reveal-pending [data-reveal] {
+  opacity: 0;
+}
+
 #lets-talk {
   margin-bottom: 0;
 }
