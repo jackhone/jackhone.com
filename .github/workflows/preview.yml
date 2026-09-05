@@ -27,13 +27,13 @@ jobs:
     steps:
       - name: Check out the branch under review
         if: github.event.action != 'closed'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           path: branch
 
       - name: Check out what the site is serving
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: main
           path: site
@@ -106,7 +106,7 @@ jobs:
 
       - name: Leave the link on the pull request
         if: github.event.action != 'closed'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const marker = "<!-- preview-url -->";
