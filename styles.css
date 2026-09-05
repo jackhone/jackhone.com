@@ -1,4 +1,25 @@
 /*
+  Inter, cut down to the Latin ranges and the two weights this site sets. Served from here rather
+  than rsms.me so the face the lines are measured in is not behind a second origin and a stylesheet
+  round trip. See assets/fonts/README.md to regenerate.
+*/
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/Inter-Medium.woff2') format('woff2');
+}
+
+/*
   Utopian Type and Spacing Scales
   - Fluid type and spacing using clamp for responsive design
 */
@@ -762,6 +783,16 @@ h2,
   color: var(--color-text-muted);
   margin-bottom: var(--space-sm);
   max-width: 800px;
+}
+
+/*
+  Text reveal (kugiri)
+  The copy is held back until the split has run and its lines have been given an animation to rise
+  with. text-reveal.js takes the hold over inline before the class comes off, and the class also
+  comes off on its own after four seconds so a page whose script never runs is only ever late.
+*/
+.text-reveal-pending [data-reveal] {
+  opacity: 0;
 }
 
 #lets-talk {
