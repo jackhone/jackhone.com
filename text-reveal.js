@@ -2,18 +2,20 @@ import { splitText } from "./vendor/kugiri.js";
 
 /*
   Every piece of copy on the page carries data-reveal. kugiri cuts each one into the lines the
-  browser painted, and each line rises out from under its own mask when the block it belongs to
-  (data-reveal-group, or the element itself) scrolls into view.
+  browser painted, and each line rises out from under its own mask as it scrolls into view. Copy
+  that comes into view together and shares a data-reveal-group is staggered as one block.
 */
 
-const DURATION = 900;
+const RISE = 1000;
+const FADE = 450;
 const STAGGER = 55;
-const EASING = "cubic-bezier(0.23, 1, 0.32, 1)";
+const RISE_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
+const FADE_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
 const SPLIT_OPTIONS = { type: ["lines"], mask: { lines: "0.3em" } };
 const PENDING_CLASS = "text-reveal-pending";
 
 const splits = new Map();
-const groups = new Map();
+const order = new Map();
 const resizing = new Set();
 let resizeFrame = 0;
 
@@ -50,12 +52,12 @@ function splitAll(targets) {
   });
 }
 
-function revealGroup(group) {
+function reveal(targets) {
   const animations = [];
   const masks = [];
   let step = 0;
 
-  for (const target of groups.get(group) || []) {
+  for (const target of targets) {
     const entry = splits.get(target);
     if (!entry || entry.revealed) continue;
 
@@ -64,19 +66,26 @@ function revealGroup(group) {
     masks.push(...entry.split.masks);
 
     for (const line of entry.split.lines) {
+      // The line is opaque well before it has finished travelling, so what reads is the rise and
+      // not the fade. Both are held back with fill so a line is hidden until its turn.
+      const delay = step++ * STAGGER;
+
       animations.push(
-        line.animate(
-          [
-            { transform: "translateY(110%)", opacity: 0 },
-            { transform: "translateY(0)", opacity: 1 },
-          ],
-          {
-            duration: DURATION,
-            delay: step++ * STAGGER,
-            easing: EASING,
-            fill: "backwards", // hidden until its turn, at rest when done
-          }
-        )
+        line.animate([{ transform: "translateY(110%)" }, { transform: "translateY(0)" }], {
+          duration: RISE,
+          delay,
+          easing: RISE_EASING,
+          fill: "backwards",
+        })
+      );
+
+      animations.push(
+        line.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: FADE,
+          delay,
+          easing: FADE_EASING,
+          fill: "backwards",
+        })
       );
     }
   }
@@ -145,29 +154,35 @@ async function init() {
     return;
   }
 
-  for (const target of targets) {
-    const group = target.closest("[data-reveal-group]") || target;
-    const members = groups.get(group);
-    if (members) members.push(target);
-    else groups.set(group, [target]);
-  }
+  targets.forEach((target, index) => order.set(target, index));
 
+  // Each block is watched on its own, so nothing is ever revealed below the fold. The blocks that
+  // cross the line together arrive in one callback, and the ones among them that share a group are
+  // staggered as a single run.
   const observer = new IntersectionObserver(
     (observations) => {
+      const arriving = new Map();
+
       for (const observation of observations) {
         if (!observation.isIntersecting) continue;
         observer.unobserve(observation.target);
-        revealGroup(observation.target);
+
+        const group = observation.target.closest("[data-reveal-group]") || observation.target;
+        const members = arriving.get(group);
+        if (members) members.push(observation.target);
+        else arriving.set(group, [observation.target]);
+      }
+
+      for (const members of arriving.values()) {
+        members.sort((a, b) => order.get(a) - order.get(b));
+        reveal(members);
       }
     },
     { rootMargin: "0px 0px -8% 0px" }
   );
 
-  for (const group of groups.keys()) {
-    observer.observe(group);
-  }
-
   for (const target of targets) {
+    observer.observe(target);
     resizeObserver.observe(target);
   }
 }
