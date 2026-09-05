@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Branch previews live on this domain but are not the site.
+Disallow: /preview/
