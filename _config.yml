@@ -1,0 +1,32 @@
+# Pages builds this repository with Jekyll and publishes everything it is not told to leave out, so
+# the site was serving its own SQL, its own import scripts and a raw Goodreads export alongside the
+# pages people actually come for. None of it is secret — the repository is public — but none of it
+# belongs on the domain either.
+#
+# Setting exclude replaces Jekyll's built-in list rather than adding to it, so the entries that guard
+# against a future Gemfile or node_modules are repeated here on purpose.
+
+exclude:
+  - docs
+  - scripts
+  - supabase
+  - README.md
+  - Goodreads Library Export.csv
+  - reading/reading_books_import.csv
+
+  # Arriving with the text reveal branch. Jekyll does not mind being told to leave out something
+  # that is not here yet, and naming them now means they never get a chance to be served. The
+  # licences that sit next to the font and the vendored library are deliberately not here: both are
+  # meant to travel with what they cover.
+  - vercel.json
+  - assets/fonts/README.md
+
+  # Jekyll's own defaults, kept because naming any of our own would otherwise drop them.
+  - Gemfile
+  - Gemfile.lock
+  - gemfiles
+  - node_modules
+  - vendor/bundle
+  - vendor/cache
+  - vendor/gems
+  - vendor/ruby
