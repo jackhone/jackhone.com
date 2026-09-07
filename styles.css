@@ -791,7 +791,8 @@ h2,
   with. text-reveal.js takes the hold over inline before the class comes off, and the class also
   comes off on its own after four seconds so a page whose script never runs is only ever late.
 */
-.text-reveal-pending [data-reveal] {
+.text-reveal-pending [data-reveal],
+.text-reveal-pending [data-reveal-block] {
   opacity: 0;
 }
 

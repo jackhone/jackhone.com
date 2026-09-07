@@ -2,13 +2,23 @@ import { splitText } from "./vendor/kugiri.js";
 
 /*
   Every piece of copy on the page carries data-reveal. kugiri cuts each one into the lines the
-  browser painted, and each line rises out from under its own mask as it scrolls into view. Copy
-  that comes into view together and shares a data-reveal-group is staggered as one block.
+  browser painted, and each line rises out from under its own mask as it scrolls into view. The
+  logo and the case study media carry data-reveal-block instead: there is nothing in them to cut,
+  so they arrive whole. Anything that comes into view together and shares a data-reveal-group is
+  staggered as one run, whichever of the two it is.
 */
 
 const RISE = 1000;
 const FADE = 450;
 const STAGGER = 55;
+
+// A line travels its own height, which is a distance the reader can see because they are about to
+// read across it. A mark or a still has no such measure, and borrowing one would have the logo
+// twitch while a case study image lumbered, so they travel a set distance instead, and cover it
+// sooner because there is less of it to cover.
+const BLOCK_RISE = 700;
+const BLOCK_FADE = 400;
+const BLOCK_DISTANCE = "0.75rem";
 const RISE_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const FADE_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
 const SPLIT_OPTIONS = { type: ["lines"], mask: { lines: "0.3em" } };
@@ -16,9 +26,14 @@ const PENDING_CLASS = "text-reveal-pending";
 const FONT_BUDGET = 1000;
 
 const splits = new Map();
+const revealed = new Set();
 const order = new Map();
 const resizing = new Set();
 let resizeFrame = 0;
+
+function isBlock(target) {
+  return target.hasAttribute("data-reveal-block");
+}
 
 function hide(target) {
   target.style.opacity = "0";
@@ -42,12 +57,9 @@ function splitAll(targets) {
   const results = splitText(targets, SPLIT_OPTIONS);
 
   targets.forEach((target, index) => {
-    const previous = splits.get(target);
-    const revealed = previous ? previous.revealed : false;
+    splits.set(target, { split: results[index], width: target.clientWidth });
 
-    splits.set(target, { split: results[index], width: target.clientWidth, revealed });
-
-    if (revealed) {
+    if (revealed.has(target)) {
       openMasks(results[index].masks);
     }
   });
@@ -59,11 +71,38 @@ function reveal(targets) {
   let step = 0;
 
   for (const target of targets) {
-    const entry = splits.get(target);
-    if (!entry || entry.revealed) continue;
+    if (revealed.has(target)) continue;
 
-    entry.revealed = true;
+    revealed.add(target);
     show(target);
+
+    // A block takes one turn in the stagger where a piece of copy takes one per line, so the logo
+    // leads the page by a beat rather than by a paragraph.
+    if (isBlock(target)) {
+      const delay = step++ * STAGGER;
+
+      animations.push(
+        target.animate(
+          [{ transform: `translateY(${BLOCK_DISTANCE})` }, { transform: "translateY(0)" }],
+          { duration: BLOCK_RISE, delay, easing: RISE_EASING, fill: "backwards" }
+        )
+      );
+
+      animations.push(
+        target.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: BLOCK_FADE,
+          delay,
+          easing: FADE_EASING,
+          fill: "backwards",
+        })
+      );
+
+      continue;
+    }
+
+    const entry = splits.get(target);
+    if (!entry) continue;
+
     masks.push(...entry.split.masks);
 
     for (const line of entry.split.lines) {
@@ -123,13 +162,13 @@ const resizeObserver = new ResizeObserver((observations) => {
     splitAll(targets);
 
     for (const target of targets) {
-      if (!splits.get(target).revealed) hide(target);
+      if (!revealed.has(target)) hide(target);
     }
   });
 });
 
 async function init() {
-  const targets = Array.from(document.querySelectorAll("[data-reveal]"));
+  const targets = Array.from(document.querySelectorAll("[data-reveal], [data-reveal-block]"));
   if (!targets.length) return;
 
   // Hold the copy back inline before the stylesheet stops doing it, so nothing is painted between
@@ -155,8 +194,13 @@ async function init() {
     return;
   }
 
+  // Only copy is cut. The blocks wait on the fonts with everything else even though no face of
+  // theirs is at stake, because arriving early would put them on screen alone, which is the one
+  // thing the reveal is meant to avoid.
+  const copy = targets.filter((target) => !isBlock(target));
+
   try {
-    splitAll(targets);
+    splitAll(copy);
   } catch (error) {
     for (const target of targets) {
       show(target);
@@ -194,6 +238,10 @@ async function init() {
 
   for (const target of targets) {
     observer.observe(target);
+  }
+
+  // Only a split has a wrap to lose, so only copy is watched for it.
+  for (const target of copy) {
     resizeObserver.observe(target);
   }
 }
