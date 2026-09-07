@@ -28,6 +28,7 @@ const BLOCK_DISTANCE = "0.75rem";
 // on screen, or for most of itself if it is small — which for a mark the size of the logo comes
 // to the same instant it used to.
 const BLOCK_VISIBLE = 160;
+
 const RISE_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const FADE_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
 const SPLIT_OPTIONS = { type: ["lines"], mask: { lines: "0.3em" } };
