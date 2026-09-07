@@ -19,6 +19,14 @@ const STAGGER = 55;
 const BLOCK_RISE = 700;
 const BLOCK_FADE = 400;
 const BLOCK_DISTANCE = "0.75rem";
+
+// A line of copy is short enough that the moment it crosses the line there is something to read.
+// A case study still is not: its top edge crosses while the rest of it is most of a screen away,
+// so a fade that starts there is spent before the reader has anything to look at, and the image
+// arrives at full strength like it was never in on it. A block waits for enough of itself to be
+// on screen, or for most of itself if it is small — which for a mark the size of the logo comes
+// to the same instant it used to.
+const BLOCK_VISIBLE = 160;
 const RISE_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const FADE_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
 const SPLIT_OPTIONS = { type: ["lines"], mask: { lines: "0.3em" } };
@@ -47,6 +55,14 @@ function runOf(target) {
   }
 
   return run;
+}
+
+function ready(observation) {
+  if (!observation.isIntersecting) return false;
+  if (!isBlock(observation.target)) return true;
+
+  const height = observation.boundingClientRect.height;
+  return observation.intersectionRect.height >= Math.min(BLOCK_VISIBLE, height * 0.6);
 }
 
 function hide(target) {
@@ -233,7 +249,7 @@ async function init() {
       const arriving = new Map();
 
       for (const observation of observations) {
-        if (!observation.isIntersecting) continue;
+        if (!ready(observation)) continue;
         observer.unobserve(observation.target);
 
         const group = runOf(observation.target);
@@ -247,7 +263,10 @@ async function init() {
         reveal(members);
       }
     },
-    { rootMargin: "0px 0px -8% 0px" }
+    // Crossing the line is the whole story for copy, but a block that is not yet showing enough of
+    // itself has to be looked at again as more of it arrives, and an observer only speaks up when a
+    // threshold is crossed.
+    { rootMargin: "0px 0px -8% 0px", threshold: [0, 0.1, 0.25, 0.5, 0.75] }
   );
 
   for (const target of targets) {
