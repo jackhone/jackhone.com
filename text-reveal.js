@@ -11,6 +11,7 @@ import { splitText } from "./vendor/kugiri.js";
 const RISE = 1000;
 const FADE = 450;
 const STAGGER = 55;
+const STAGGER_BUDGET = 600;
 
 // A line travels its own height, which is a distance the reader can see because they are about to
 // read across it. A mark or a still has no such measure, and borrowing one would have the logo
@@ -96,9 +97,8 @@ function splitAll(targets) {
 }
 
 function reveal(targets) {
-  const animations = [];
+  const movers = [];
   const masks = [];
-  let step = 0;
 
   for (const target of targets) {
     if (revealed.has(target)) continue;
@@ -106,27 +106,10 @@ function reveal(targets) {
     revealed.add(target);
     show(target);
 
-    // A block takes one turn in the stagger where a piece of copy takes one per line, so the logo
-    // leads the page by a beat rather than by a paragraph.
+    // A block moves as itself and takes a single turn, where a piece of copy hands over its lines
+    // and takes one each. That is what has the logo lead the page by a beat and not by a paragraph.
     if (isBlock(target)) {
-      const delay = step++ * STAGGER;
-
-      animations.push(
-        target.animate(
-          [{ transform: `translateY(${BLOCK_DISTANCE})` }, { transform: "translateY(0)" }],
-          { duration: BLOCK_RISE, delay, easing: RISE_EASING, fill: "backwards" }
-        )
-      );
-
-      animations.push(
-        target.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: BLOCK_FADE,
-          delay,
-          easing: FADE_EASING,
-          fill: "backwards",
-        })
-      );
-
+      movers.push(target);
       continue;
     }
 
@@ -134,33 +117,42 @@ function reveal(targets) {
     if (!entry) continue;
 
     masks.push(...entry.split.masks);
-
-    for (const line of entry.split.lines) {
-      // The line is opaque well before it has finished travelling, so what reads is the rise and
-      // not the fade. Both are held back with fill so a line is hidden until its turn.
-      const delay = step++ * STAGGER;
-
-      animations.push(
-        line.animate([{ transform: "translateY(110%)" }, { transform: "translateY(0)" }], {
-          duration: RISE,
-          delay,
-          easing: RISE_EASING,
-          fill: "backwards",
-        })
-      );
-
-      animations.push(
-        line.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: FADE,
-          delay,
-          easing: FADE_EASING,
-          fill: "backwards",
-        })
-      );
-    }
+    movers.push(...entry.split.lines);
   }
 
-  if (!animations.length) return;
+  if (!movers.length) return;
+
+  // At the full gap the hero would spend most of a second staggering, being the intro and the whole
+  // work list arriving as one run. The gap closes up as a run lengthens so all of it lands inside
+  // the budget, while the short runs that make up the rest of the page keep the spacing the page
+  // was tuned to.
+  const gap = Math.min(STAGGER, STAGGER_BUDGET / Math.max(1, movers.length - 1));
+  const animations = [];
+
+  movers.forEach((mover, step) => {
+    const delay = Math.round(step * gap);
+    const block = isBlock(mover);
+
+    animations.push(
+      mover.animate(
+        block
+          ? [{ transform: `translateY(${BLOCK_DISTANCE})` }, { transform: "translateY(0)" }]
+          : [{ transform: "translateY(110%)" }, { transform: "translateY(0)" }],
+        { duration: block ? BLOCK_RISE : RISE, delay, easing: RISE_EASING, fill: "backwards" }
+      )
+    );
+
+    // Whatever is moving is opaque well before it has finished travelling, so what reads is the
+    // rise and not the fade. Both are held back with fill so nothing is on screen before its turn.
+    animations.push(
+      mover.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: block ? BLOCK_FADE : FADE,
+        delay,
+        easing: FADE_EASING,
+        fill: "backwards",
+      })
+    );
+  });
 
   const drop = () => openMasks(masks);
   Promise.all(animations.map((animation) => animation.finished)).then(drop, drop);
