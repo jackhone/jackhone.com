@@ -35,6 +35,20 @@ function isBlock(target) {
   return target.hasAttribute("data-reveal-block");
 }
 
+// Groups nest: the work list sits inside the hero, the contact rows inside let's talk. Taking the
+// nearest one would start the inner list from zero, which is what had the first job date landing
+// before the name it belongs to. The outermost is what the eye reads as one thing arriving, so a
+// run is measured from there and the whole hero cascades once, in the order it is written.
+function runOf(target) {
+  let run = target;
+
+  for (let el = target.parentElement; el; el = el.parentElement) {
+    if (el.hasAttribute("data-reveal-group")) run = el;
+  }
+
+  return run;
+}
+
 function hide(target) {
   target.style.opacity = "0";
   target.style.pointerEvents = "none";
@@ -222,7 +236,7 @@ async function init() {
         if (!observation.isIntersecting) continue;
         observer.unobserve(observation.target);
 
-        const group = observation.target.closest("[data-reveal-group]") || observation.target;
+        const group = runOf(observation.target);
         const members = arriving.get(group);
         if (members) members.push(observation.target);
         else arriving.set(group, [observation.target]);
