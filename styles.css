@@ -46,6 +46,7 @@
   --color-text-muted: #666666;
   --color-border: #CCCCCC;
   --color-footer: #F0F0F0;
+  --color-error: #B3261E;
   --two-col-label-width: clamp(6.5rem, 12vw, 9.5rem);
 
   --font-body: 'Inter', system-ui, sans-serif;
@@ -618,6 +619,7 @@ h2,
 }
 
 #lets-talk .contact-link--external::after,
+.book-page .contact-link--external::after,
 .work-place .contact-link::after {
   content: "";
   display: inline-block;
@@ -632,13 +634,20 @@ h2,
   vertical-align: -0.05em;
 }
 
-#lets-talk .contact-link--external::after {
+#lets-talk .contact-link--external::after,
+.book-page .contact-link--external::after {
   background-image: url("assets/arrow-up-right.svg");
 }
 
 #lets-talk .contact-link--external:hover::after,
+.book-page .contact-link--external:hover::after,
 .work-place .contact-link:hover::after {
   opacity: 0.85;
+}
+
+/* The arrow carries the affordance, matching the Let's talk treatment. */
+.book-page .contact-link--external {
+  text-decoration: none;
 }
 
 .contact-link-icon {
@@ -810,4 +819,318 @@ h2,
 
 #lets-talk h2 {
   margin-bottom: var(--space-sm);
+}
+
+/* Booking page (Cal.com) */
+
+.book-page {
+  max-width: 760px;
+}
+
+.book-page-logo {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+  transition: opacity 0.2s;
+}
+
+.book-page-logo:hover {
+  opacity: 0.7;
+}
+
+.book-page-logo img {
+  width: 2.5rem;
+  height: 2.5rem;
+  vertical-align: middle;
+}
+
+.book-page-logo:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-text);
+  border-radius: 4px;
+}
+
+.book-page-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--heading-weight);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.book-page-intro,
+.book-page-note,
+.book-fallback {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  max-width: 800px;
+}
+
+.book-page-intro {
+  margin-bottom: var(--space-lg);
+}
+
+.book-page-note {
+  margin-top: var(--space-lg);
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: var(--two-col-label-width) minmax(0, 1fr);
+  gap: var(--space-xs) var(--space-md);
+  align-items: start;
+  max-width: 760px;
+}
+
+.book-row {
+  display: contents;
+}
+
+/* An explicit display value beats the UA rule for [hidden], so restate it. */
+.book-grid[hidden],
+.book-row[hidden] {
+  display: none;
+}
+
+.book-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--heading-weight);
+  color: var(--color-text);
+  padding: var(--space-xs) 0;
+}
+
+.book-choices,
+.book-times {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0;
+  min-width: 0;
+}
+
+.book-times {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Chips size to their content: slot labels vary in width by locale
+   ("09:00" vs "10:45 AM"), and a fixed track clips the longer ones. */
+.book-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  width: 100%;
+  max-width: 30rem;
+}
+
+.book-slots .book-choice {
+  min-width: 4.5rem;
+}
+
+.book-choice {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1px solid var(--color-tag);
+  border-radius: 8px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.book-choice:hover {
+  border-color: var(--color-border);
+}
+
+.book-choice.is-selected {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.book-choice:focus-visible,
+.book-submit:focus-visible,
+.book-more:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-text);
+}
+
+.book-more {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: #757575;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  width: fit-content;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #c9c9c9;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.12em;
+}
+
+.book-more:hover {
+  color: #5e5e5e;
+  text-decoration-color: #aaaaaa;
+}
+
+.book-hint {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
+.book-hint--block {
+  display: block;
+  width: 100%;
+}
+
+.book-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0;
+  width: 100%;
+  max-width: 30rem;
+}
+
+.book-summary {
+  font-size: var(--font-size-base);
+  font-weight: var(--heading-weight);
+  color: var(--color-text);
+}
+
+.book-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.book-field-label {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
+.book-input {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1px solid var(--color-tag);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.book-input:hover {
+  border-color: var(--color-border);
+}
+
+.book-input:focus {
+  outline: none;
+  border-color: var(--color-text);
+}
+
+.book-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xxs);
+}
+
+.book-submit {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--color-bg);
+  background: var(--color-text);
+  border: 1px solid var(--color-text);
+  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.book-submit:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.book-submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.book-error {
+  grid-column: 2;
+  font-size: var(--font-size-base);
+  color: var(--color-error);
+}
+
+.book-status[hidden] {
+  display: none;
+}
+
+.book-confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xxs);
+  background: var(--color-card);
+  border: 1px solid var(--color-tag);
+  border-radius: 8px;
+  padding: var(--space-sm);
+  max-width: 30rem;
+}
+
+.book-confirmation-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--heading-weight);
+  color: var(--color-text);
+}
+
+.book-confirmation-detail {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.book-confirmation .book-more {
+  margin-top: var(--space-xs);
+}
+
+@media (max-width: 700px) {
+  .book-grid {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+  .book-label {
+    padding-bottom: 0;
+  }
+  .book-error {
+    grid-column: 1;
+  }
+  .book-choices,
+  .book-times,
+  .book-form {
+    padding-top: 0;
+  }
+  .book-slots {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-choice,
+  .book-input,
+  .book-submit {
+    transition: none;
+  }
 }
