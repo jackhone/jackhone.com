@@ -103,15 +103,25 @@
     grid.appendChild(dayRow.wrapper);
     grid.appendChild(timeRow.wrapper);
     grid.appendChild(detailsRow.wrapper);
+
+    // One notice for both field validation and booking failures. It sits in the
+    // content column under the form, so it reads as part of the form while that is
+    // open and stays visible if a taken slot sends the visitor back to the picker.
+    var notice = el('p', 'book-error');
+    notice.setAttribute('role', 'alert');
+    notice.hidden = true;
+    grid.appendChild(notice);
+
     root.appendChild(grid);
 
-    var status = el('p', 'book-status');
+    var status = el('div', 'book-status');
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
     root.appendChild(status);
 
     return {
       grid: grid,
+      notice: notice,
       length: lengthRow.content,
       dayRow: dayRow.wrapper,
       days: dayRow.content,
@@ -171,24 +181,29 @@
     return dateKeyFor(date);
   }
 
+  // Build a local Date for a calendar day so labels never shift in far-eastern
+  // timezones, where a fixed UTC hour can land on the neighbouring date.
+  function parseDateKey(dateKey) {
+    var parts = dateKey.split('-');
+    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  }
+
   function formatDayLabel(dateKey) {
     if (dateKey === todayKey()) return 'Today';
     if (dateKey === shiftDays(1)) return 'Tomorrow';
-    var date = new Date(dateKey + 'T12:00:00Z');
     return new Intl.DateTimeFormat(undefined, {
       weekday: 'short',
       day: 'numeric',
       month: 'short'
-    }).format(date);
+    }).format(parseDateKey(dateKey));
   }
 
   function formatLongDayLabel(dateKey) {
-    var date = new Date(dateKey + 'T12:00:00Z');
     return new Intl.DateTimeFormat(undefined, {
       weekday: 'long',
       day: 'numeric',
       month: 'long'
-    }).format(date);
+    }).format(parseDateKey(dateKey));
   }
 
   function formatTime(value) {
@@ -355,11 +370,18 @@
     }
 
     els.grid.hidden = false;
+    els.status.hidden = true;
+    els.status.textContent = '';
     renderLengths();
     renderDays();
     renderTimes();
     renderDetails();
-    renderStatus();
+    renderNotice();
+  }
+
+  function renderNotice() {
+    els.notice.textContent = state.formError || '';
+    els.notice.hidden = !state.formError;
   }
 
   function renderLengths() {
@@ -502,26 +524,22 @@
     els.detailsRow.hidden = !active;
     if (!active) {
       els.details.textContent = '';
+      els.details.dataset.slot = '';
       return;
     }
 
-    // Rebuild only when entering the stage, so typing survives re-renders.
+    // Rebuild only when the slot changes, so typing survives re-renders.
     if (els.details.dataset.slot !== state.selectedSlot) {
       els.details.textContent = '';
       els.details.dataset.slot = state.selectedSlot;
       els.details.appendChild(buildForm());
     }
 
-    var form = els.details.querySelector('form');
-    if (!form) return;
-
+    var submit = els.details.querySelector('.book-submit');
+    if (!submit) return;
     var submitting = state.stage === 'submitting';
-    form.querySelector('.book-submit').disabled = submitting;
-    form.querySelector('.book-submit').textContent = submitting ? 'Booking…' : 'Confirm booking';
-
-    var error = form.querySelector('.book-error');
-    error.textContent = state.formError || '';
-    error.hidden = !state.formError;
+    submit.disabled = submitting;
+    submit.textContent = submitting ? 'Booking…' : 'Confirm booking';
   }
 
   function buildForm() {
@@ -535,11 +553,6 @@
     form.appendChild(field(form, 'text', 'book-name', 'Name', true));
     form.appendChild(field(form, 'email', 'book-email', 'Email', true));
     form.appendChild(field(form, 'textarea', 'book-notes', 'What would you like to talk about?', false));
-
-    var error = el('p', 'book-error');
-    error.hidden = true;
-    error.setAttribute('role', 'alert');
-    form.appendChild(error);
 
     var actions = el('div', 'book-actions');
     var submit = el('button', 'book-submit', 'Confirm booking');
@@ -589,11 +602,6 @@
   function focusFirstField() {
     var input = document.getElementById('book-name');
     if (input && !input.value) input.focus({ preventScroll: true });
-  }
-
-  function renderStatus() {
-    els.status.textContent = '';
-    els.status.hidden = true;
   }
 
   /* ----------------------------------------------------------------- submit */
@@ -672,6 +680,7 @@
 
   function renderConfirmation() {
     els.grid.hidden = true;
+    els.notice.hidden = true;
     els.status.hidden = false;
     els.status.textContent = '';
 
@@ -712,7 +721,6 @@
       state.booking = null;
       state.dayLimit = VISIBLE_DAYS;
       resetSelection();
-      els.details.dataset.slot = '';
       loadSlots(state.eventType.slug, { force: true });
       render();
     });

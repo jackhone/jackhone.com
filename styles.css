@@ -590,6 +590,7 @@ h2,
 }
 
 #lets-talk .contact-link--external::after,
+.book-page .contact-link--external::after,
 .work-place .contact-link::after {
   content: "";
   display: inline-block;
@@ -604,13 +605,20 @@ h2,
   vertical-align: -0.05em;
 }
 
-#lets-talk .contact-link--external::after {
+#lets-talk .contact-link--external::after,
+.book-page .contact-link--external::after {
   background-image: url("assets/arrow-up-right.svg");
 }
 
 #lets-talk .contact-link--external:hover::after,
+.book-page .contact-link--external:hover::after,
 .work-place .contact-link:hover::after {
   opacity: 0.85;
+}
+
+/* The arrow carries the affordance, matching the Let's talk treatment. */
+.book-page .contact-link--external {
+  text-decoration: none;
 }
 
 .contact-link-icon {
@@ -837,6 +845,8 @@ h2,
   display: contents;
 }
 
+/* An explicit display value beats the UA rule for [hidden], so restate it. */
+.book-grid[hidden],
 .book-row[hidden] {
   display: none;
 }
@@ -863,12 +873,18 @@ h2,
   align-items: flex-start;
 }
 
+/* Chips size to their content: slot labels vary in width by locale
+   ("09:00" vs "10:45 AM"), and a fixed track clips the longer ones. */
 .book-slots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-xs);
   width: 100%;
   max-width: 30rem;
+}
+
+.book-slots .book-choice {
+  min-width: 4.5rem;
 }
 
 .book-choice {
@@ -1014,6 +1030,7 @@ h2,
 }
 
 .book-error {
+  grid-column: 2;
   font-size: var(--font-size-base);
   color: var(--color-error);
 }
@@ -1057,13 +1074,15 @@ h2,
   .book-label {
     padding-bottom: 0;
   }
+  .book-error {
+    grid-column: 1;
+  }
   .book-choices,
   .book-times,
   .book-form {
     padding-top: 0;
   }
   .book-slots {
-    grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
     max-width: none;
   }
 }
