@@ -1,0 +1,11 @@
+# A deployment should carry what the browser is served and nothing else. Pages publishes the whole
+# repository, which is why the schema, the scripts and the Goodreads export are all fetchable on the
+# live site today; there is no reason to take that with us.
+.github
+.cursor
+docs
+scripts
+supabase
+*.csv
+CNAME
+README.md
