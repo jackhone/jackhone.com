@@ -63,6 +63,14 @@ html {
   height: 100%;
 }
 
+/* A page that glides the length of itself when the footer mark is clicked is the kind of movement
+   someone turns off at the system level. The preference takes the glide away and leaves the jump. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   height: 100%;
   overflow-x: hidden;
