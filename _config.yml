@@ -1,10 +1,12 @@
 # Pages builds this repository with Jekyll and publishes everything it is not told to leave out, so
-# the site was serving its own SQL, its own import scripts and a raw Goodreads export alongside the
-# pages people actually come for. None of it is secret — the repository is public — but none of it
-# belongs on the domain either.
+# the site serves its own SQL, its own import scripts and a raw Goodreads export alongside the pages
+# people actually come for. None of it is secret — the repository is public — but none of it belongs
+# on the domain either.
 #
-# Setting exclude replaces Jekyll's built-in list rather than adding to it, so the entries that guard
-# against a future Gemfile or node_modules are repeated here on purpose.
+# Jekyll is also not just copying. It renders every markdown file it finds into a themed page, so
+# docs/reading-books-setup.md is served twice over, once raw and once as HTML, and the README beside
+# the fonts becomes the directory index at /assets/fonts/. Leaving the sources out takes those with
+# them.
 
 exclude:
   - docs
@@ -13,20 +15,26 @@ exclude:
   - README.md
   - Goodreads Library Export.csv
   - reading/reading_books_import.csv
-
-  # Arriving with the text reveal branch. Jekyll does not mind being told to leave out something
-  # that is not here yet, and naming them now means they never get a chance to be served. The
-  # licences that sit next to the font and the vendored library are deliberately not here: both are
-  # meant to travel with what they cover.
   - vercel.json
   - assets/fonts/README.md
 
-  # Jekyll's own defaults, kept because naming any of our own would otherwise drop them.
+  # Pages appends this to Jekyll's default exclude list, and stops doing so the moment we set one of
+  # our own, so keeping the domain file out of the build is now ours to do. Pages reads CNAME from
+  # the branch, not from what it builds; the custom domain does not depend on it being served.
+  - CNAME
+
+  # Jekyll's defaults, verbatim. Setting exclude replaces that list rather than extending it, so
+  # these are repeated to keep a future Gemfile or node_modules out of the site.
   - Gemfile
   - Gemfile.lock
-  - gemfiles
   - node_modules
-  - vendor/bundle
-  - vendor/cache
-  - vendor/gems
-  - vendor/ruby
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Pages hands every site a theme whether it asks for one or not, and then publishes that theme's
+# stylesheet: 75KB of Primer at /assets/css/style.css, which nothing on the site has ever linked to.
+# The licences next to the font and the vendored library stay published on purpose — both are meant
+# to travel with what they cover.
+theme: null
