@@ -9,3 +9,6 @@ supabase
 *.csv
 CNAME
 README.md
+
+# Instructions to the Pages build, which is not what builds a preview.
+_config.yml
