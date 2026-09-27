@@ -485,6 +485,44 @@
     })();
   </script>
 
+  <script>
+    /*
+      The case study videos autoplay and loop, so they are movement that never stops of its own
+      accord. Someone who has asked their system for less of it should be left with a still frame
+      instead: autoplay is taken off them here, before any of them has the data to start, and enough
+      is still fetched to paint the frame they are held on. The preference can be changed while the
+      page is open, so it is watched rather than read once.
+    */
+    (function () {
+      var videos = document.querySelectorAll('video[autoplay]');
+      if (!videos.length || !window.matchMedia) return;
+
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      function apply() {
+        for (var i = 0; i < videos.length; i++) {
+          var video = videos[i];
+
+          if (reduced.matches) {
+            // Paused with nothing fetched is an empty box where the case study should be.
+            video.preload = 'auto';
+            video.autoplay = false;
+            video.pause();
+          } else {
+            video.autoplay = true;
+            var started = video.play();
+            if (started && started.catch) started.catch(function () {});
+          }
+        }
+      }
+
+      apply();
+
+      if (reduced.addEventListener) reduced.addEventListener('change', apply);
+      else if (reduced.addListener) reduced.addListener(apply);
+    })();
+  </script>
+
   
 </body>
 </html>
