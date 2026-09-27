@@ -248,7 +248,7 @@ h2,
   gap: 0.1rem;
 }
 .work-period {
-  color: var(--color-text);
+  color: var(--color-text-muted);
 }
 .work-place {
   font-weight: 400;
