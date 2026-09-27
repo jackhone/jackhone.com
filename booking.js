@@ -17,6 +17,7 @@
   var WINDOW_DAYS = 60;
   // Collapsed counts, so a busy calendar doesn't push the page height around.
   var VISIBLE_DAYS = 5;
+  var DAY_PAGE = 14;
   var VISIBLE_TIMES = 12;
   // Availability goes stale while the page sits open.
   var SLOTS_MAX_AGE_MS = 5 * 60 * 1000;
@@ -39,7 +40,7 @@
     loadError: null,
     selectedDate: null,
     selectedSlot: null,
-    showAllDays: false,
+    dayLimit: VISIBLE_DAYS,
     showAllTimes: false,
     stage: 'picking', // picking | details | submitting | done
     booking: null,
@@ -191,8 +192,10 @@
   }
 
   function formatTime(value) {
+    // Numeric hours so 24-hour locales stay padded ("08:00") without 12-hour
+    // locales gaining an odd leading zero ("08:00 AM").
     return new Intl.DateTimeFormat(undefined, {
-      hour: '2-digit',
+      hour: 'numeric',
       minute: '2-digit',
       timeZone: timeZone
     }).format(new Date(value));
@@ -370,7 +373,7 @@
       var button = choice(label, isSelected, function () {
         if (isSelected) return;
         state.eventType = eventType;
-        state.showAllDays = false;
+        state.dayLimit = VISIBLE_DAYS;
         resetSelection();
         loadSlots(eventType.slug);
         render();
@@ -409,7 +412,7 @@
       return;
     }
 
-    var visible = state.showAllDays ? days : days.slice(0, VISIBLE_DAYS);
+    var visible = days.slice(0, state.dayLimit);
     visible.forEach(function (day) {
       var isSelected = day.date === state.selectedDate;
       els.days.appendChild(
@@ -424,11 +427,20 @@
       );
     });
 
-    if (days.length > VISIBLE_DAYS) {
-      var remaining = days.length - VISIBLE_DAYS;
+    // Reveal further days a page at a time rather than dumping two months of
+    // chips on screen at once.
+    var remaining = days.length - visible.length;
+    if (remaining > 0) {
       els.days.appendChild(
-        moreButton(state.showAllDays ? 'Fewer days' : remaining + ' more', function () {
-          state.showAllDays = !state.showAllDays;
+        moreButton(remaining + ' more', function () {
+          state.dayLimit = Math.min(days.length, state.dayLimit + DAY_PAGE);
+          render();
+        })
+      );
+    } else if (days.length > VISIBLE_DAYS) {
+      els.days.appendChild(
+        moreButton('Fewer days', function () {
+          state.dayLimit = VISIBLE_DAYS;
           render();
         })
       );
@@ -698,7 +710,7 @@
 
     var again = moreButton('Book another time', function () {
       state.booking = null;
-      state.showAllDays = false;
+      state.dayLimit = VISIBLE_DAYS;
       resetSelection();
       els.details.dataset.slot = '';
       loadSlots(state.eventType.slug, { force: true });

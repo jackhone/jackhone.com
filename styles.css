@@ -766,28 +766,63 @@ h2,
 }
 
 #lets-talk {
-  margin-bottom: var(--space-lg);
+  margin-bottom: 0;
 }
 
 #lets-talk h2 {
   margin-bottom: var(--space-sm);
 }
 
-/* Booking (Cal.com) */
+/* Booking page (Cal.com) */
 
-#book {
-  margin-bottom: 0;
+.book-page {
+  max-width: 760px;
 }
 
-.book-desc,
+.book-page-logo {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+  transition: opacity 0.2s;
+}
+
+.book-page-logo:hover {
+  opacity: 0.7;
+}
+
+.book-page-logo img {
+  width: 2.5rem;
+  height: 2.5rem;
+  vertical-align: middle;
+}
+
+.book-page-logo:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-text);
+  border-radius: 4px;
+}
+
+.book-page-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--heading-weight);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.book-page-intro,
+.book-page-note,
 .book-fallback {
-  color: var(--color-text-muted);
   font-size: var(--font-size-base);
+  color: var(--color-text-muted);
   max-width: 800px;
 }
 
-.book-desc {
-  margin-bottom: var(--space-sm);
+.book-page-intro {
+  margin-bottom: var(--space-lg);
+}
+
+.book-page-note {
+  margin-top: var(--space-lg);
 }
 
 .book-grid {
