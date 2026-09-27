@@ -37,7 +37,6 @@
     // slug -> { days: [{ date, slots: [iso] }], fetchedAt }
     cache: {},
     status: 'loading', // loading | ready | error
-    loadError: null,
     selectedDate: null,
     selectedSlot: null,
     dayLimit: VISIBLE_DAYS,
@@ -266,7 +265,6 @@
     }
 
     state.status = 'loading';
-    state.loadError = null;
     render();
 
     var params = new URLSearchParams({
@@ -297,8 +295,9 @@
       .catch(function (err) {
         if (state.eventType.slug !== slug) return null;
         state.status = 'error';
-        state.loadError = err.message;
         render();
+        // Surfaced generically in the UI; keep the detail for debugging.
+        if (window.console) console.warn('Cal.com availability failed:', err.message);
         return null;
       });
   }
@@ -340,12 +339,13 @@
     }
   }
 
+  // Deliberately leaves formError alone: when a slot is taken mid-flow this runs
+  // while the explanation still needs to be on screen.
   function resetSelection() {
     state.selectedDate = null;
     state.selectedSlot = null;
     state.showAllTimes = false;
     state.stage = 'picking';
-    state.formError = null;
   }
 
   function currentDays() {
@@ -396,6 +396,7 @@
         if (isSelected) return;
         state.eventType = eventType;
         state.dayLimit = VISIBLE_DAYS;
+        state.formError = null;
         resetSelection();
         loadSlots(eventType.slug);
         render();
@@ -720,6 +721,7 @@
     var again = moreButton('Book another time', function () {
       state.booking = null;
       state.dayLimit = VISIBLE_DAYS;
+      state.formError = null;
       resetSelection();
       loadSlots(state.eventType.slug, { force: true });
       render();

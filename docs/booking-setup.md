@@ -96,9 +96,21 @@ python3 -m http.server 8788
 Then open http://localhost:8788/book/m9qtetikcnkt/.
 
 Requests hit the real Cal.com API, so **submitting the form creates a real booking**.
-Cancel any test bookings from the "Reschedule or cancel" link on the confirmation
-screen. Cal.com rejects undeliverable addresses, so `@example.com` will not work for a
-test — use a real inbox.
+Cal.com rejects undeliverable addresses, so `@example.com` will not work for a test —
+use a real inbox.
+
+Cancel a test booking from the "Reschedule or cancel" link on the confirmation screen,
+or by uid, which also needs no API key:
+
+```bash
+curl -X POST "https://api.cal.com/v2/bookings/<uid>/cancel" \
+  -H "Content-Type: application/json" \
+  -H "cal-api-version: 2024-08-13" \
+  -d '{"cancellationReason":"Test booking"}'
+```
+
+Copy the uid from the confirmation link rather than reading it off the screen. These
+ids mix similar-looking characters, and a mistyped uid is unrecoverable.
 
 ## Analytics
 
