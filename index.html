@@ -498,21 +498,35 @@
       if (!videos.length || !window.matchMedia) return;
 
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var held = false;
 
       function apply() {
-        for (var i = 0; i < videos.length; i++) {
-          var video = videos[i];
+        var i, video;
 
-          if (reduced.matches) {
+        if (reduced.matches) {
+          held = true;
+
+          for (i = 0; i < videos.length; i++) {
+            video = videos[i];
             // Paused with nothing fetched is an empty box where the case study should be.
             video.preload = 'auto';
             video.autoplay = false;
             video.pause();
-          } else {
-            video.autoplay = true;
-            var started = video.play();
-            if (started && started.catch) started.catch(function () {});
           }
+
+          return;
+        }
+
+        // Nothing was ever taken away, so there is nothing to give back, and the browser is left to
+        // start them on its own terms the way it always has.
+        if (!held) return;
+        held = false;
+
+        for (i = 0; i < videos.length; i++) {
+          video = videos[i];
+          video.autoplay = true;
+          var started = video.play();
+          if (started && started.catch) started.catch(function () {});
         }
       }
 
